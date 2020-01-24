@@ -13,9 +13,6 @@ import components.launch_app as launch_app
 import background.displays as displays
 import background.location_processing as location_processing
 
-Path(config.LOGGING_DATA_PATH).mkdir(parents=True, exist_ok=True)
-Path(config.BACKGROUND_TASKS_DATA_PATH).mkdir(parents=True, exist_ok=True)
-
 app = Flask(__name__)
 
 @app.route('/')

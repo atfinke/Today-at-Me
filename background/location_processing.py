@@ -1,8 +1,10 @@
 import csv, os, threading
+from pathlib import Path
 
 from components import icloud, logging
 import config
 
+Path(config.BACKGROUND_TASKS_DATA_PATH).mkdir(parents=True, exist_ok=True)
 logger = logging.setup_logger(
     'location-processing', config.LOCATION_PROCESSING_LOGGING_PATH)
 
