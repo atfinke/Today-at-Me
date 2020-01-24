@@ -1,6 +1,5 @@
 
-import requests, threading
-from pathlib import Path
+import argparse, requests, threading
 from flask import Flask, render_template, request
 
 import config
@@ -33,8 +32,14 @@ if __name__ == '__main__':
     # application on Google App Engine. See entrypoint in app.yaml.
     # app.run(host='127.0.0.1', port=8080, debug=True)
     # _configure_for_connected_display()
-    
 
-    if config.LOCATION_PROCESSING_ONLY_MODE:
+    parser = argparse.ArgumentParser(description='Today at Me')
+    parser.add_argument('-is', action="store_true", dest='ICLOUD_REQUIRES_SETUP', default=config.ICLOUD_REQUIRES_SETUP)
+    parser.add_argument('-lp', action="store_true", dest='LOCATION_PROCESSING_ONLY_MODE', default=True)
+    args = parser.parse_args()
+
+    if args.ICLOUD_REQUIRES_SETUP:
+        icloud.setup()
+    elif args.LOCATION_PROCESSING_ONLY_MODE:
         location_processing.start()
-    print(1)
+    print('done')
