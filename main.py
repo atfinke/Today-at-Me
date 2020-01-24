@@ -15,19 +15,18 @@ app = Flask(__name__)
 def template_home():
     return render_template('home.html')
 
-weather.fetch()
+# weather.fetch()
+# icloud.fetch_my_devices()
 
-def _external_display_checker():
-    if displays.isConnectedToExternalDisplay:
-        applescript.run_sync('tell application "System Events" to set the autohide of the dock preferences to false')
-    else:
-        applescript.run_sync('tell application "System Events" to set the autohide of the dock preferences to true')
-    threading.Timer(5.0, _external_display_checker).start()
+
+def _configure_for_connected_display():
+    displays.configure_for_connected_display()
+    threading.Timer(5.0, _configure_for_connected_display).start()
 
 
 if __name__ == '__main__':
     # This is used when running locally. Gunicorn is used to run the
     # application on Google App Engine. See entrypoint in app.yaml.
     # app.run(host='127.0.0.1', port=8080, debug=True)
-    # _external_display_checker()
+    _configure_for_connected_display()
     print(1)
