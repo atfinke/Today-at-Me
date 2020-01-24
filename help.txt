@@ -1,0 +1,23 @@
+tail -f your.log
+
+--- 
+
+SSH:
+https://apple.stackexchange.com/questions/66568/nohup-or-persistent-process-on-mac-os-x-ssh
+
+Open a new 'screen' instance
+
+$ screen
+Once, in the screen, you can 'detach' (or close out of it) the screen like this:
+ctrl+A and then press D
+
+To resume a screen, you typically do this:
+$ screen -x
+
+If you have more than one screen instance, it will tell you their IDs, in which case you can choose which one to resume like this:
+$ screen -r <screen id>
+
+--- 
+
+conda env export > environment.yaml
+conda env update --file environment.yml
