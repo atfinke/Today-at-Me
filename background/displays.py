@@ -1,18 +1,32 @@
 import subprocess
-from components import applescript, launch_app
+from components import applescript, logging
+import config
+
+logger = logging.setup_logger(
+    'displays', config.DISPLAYS_LOGGING_PATH)
 
 __was_connected_to_external_display = None
 
+
 def _is_connected_to_external_display():
-    result = subprocess.run(['system_profiler', 'SPDisplaysDataType'], stdout=subprocess.PIPE)
-    return b"Connection Type: DisplayPort" in result.stdout
+    logger.info('_is_connected_to_external_display: called')
+    result = subprocess.run(
+        ['system_profiler', 'SPDisplaysDataType'], stdout=subprocess.PIPE)
+    is_connected_to_external_display = b"Connection Type: DisplayPort" in result.stdout
+    logger.info('_is_connected_to_external_display: result: {}'.format(is_connected_to_external_display))
+    return is_connected_to_external_display
+
 
 def configure_for_connected_display():
+    logger.info('configure_for_connected_display: called')
+
     global __was_connected_to_external_display
     is_connected_to_external_display = _is_connected_to_external_display()
     if __was_connected_to_external_display == is_connected_to_external_display:
+        logger.info('configure_for_connected_display: same state')
         return
     else:
+        logger.info('configure_for_connected_display: new state')
         __was_connected_to_external_display = is_connected_to_external_display
 
     if is_connected_to_external_display:
@@ -32,6 +46,7 @@ def configure_for_connected_display():
         tell application "time.app" to activate
         '''.format(__open_system_preferences_script(), __system_events_script(is_connected_to_external_display=False))
         applescript.run_sync(script)
+    logger.info('configure_for_connected_display: updated system')
 
 
 # Script Builders
@@ -51,6 +66,7 @@ def __open_system_preferences_script():
         end try
     end tell
     '''
+
 
 def __system_events_script(is_connected_to_external_display):
     opposite_of_hide_menu_bar = 'true' if is_connected_to_external_display else 'false'

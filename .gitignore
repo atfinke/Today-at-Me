@@ -129,4 +129,5 @@ dmypy.json
 .pyre/
 
 .DS_Store
+user-data/
 secrets.py
