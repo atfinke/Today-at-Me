@@ -1,12 +1,12 @@
 import subprocess
+
 from components import applescript, logging
-import config
+from configuration import config
 
 logger = logging.setup_logger(
     'displays', config.DISPLAYS_LOGGING_PATH)
 
 __was_connected_to_external_display = None
-
 
 def _is_connected_to_external_display():
     logger.info('_is_connected_to_external_display: called')

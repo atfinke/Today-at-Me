@@ -1,7 +1,7 @@
 import logging
 from pathlib import Path
 
-import config
+from configuration import config
 
 def setup_logger(name, log_file):
     Path(config.LOGGING_DATA_PATH).mkdir(parents=True, exist_ok=True)

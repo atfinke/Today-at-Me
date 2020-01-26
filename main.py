@@ -2,22 +2,20 @@ import argparse
 import requests
 import threading
 from flask import Flask, render_template, request, jsonify, send_file
-
-import config
-import builders
+from werkzeug.serving import WSGIRequestHandler
 
 import components.logging as logging
 import components.spotify as spotify
-
-import background.displays as displays
 import components.calendar as calendar
 import components.google as google
+import components.builders as builders
 
-from werkzeug.serving import WSGIRequestHandler
+import background.displays as displays
+
+from configuration import config
 
 WSGIRequestHandler.protocol_version = "HTTP/1.1"
 app = Flask(__name__)
-
 
 @app.after_request
 def add_header(r):
@@ -50,7 +48,8 @@ def spotify_now_playing():
 
 @app.route("/spotify/now_playing.jpeg", methods=["GET"])
 def spotify_now_playing_image():
-    if spotify.prepare_to_send_image():
+    destination = request.args.get('destination')
+    if spotify.prepare_to_send_image(destination):
         return send_file(config.SPOTIFY_IMAGE_PATH, mimetype='image/jpeg')
     else:
         return "Unchanged", 304

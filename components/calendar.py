@@ -1,20 +1,17 @@
+import json
 import objc
-
-from CalendarStore import CalCalendarStore, CalEvent, CalTask
-from Cocoa import NSDate
 
 from datetime import datetime, timedelta
 from dateutil import tz
 
-import json
-import time
-import config
+from CalendarStore import CalCalendarStore, CalEvent, CalTask
+from Cocoa import NSDate
 
 from components import logging
+from configuration import config
 
 logger = logging.setup_logger(
     'calendar', config.CALENDAR_LOGGING_PATH)
-
 memory_cache = None
 
 def fetch_events():
@@ -31,11 +28,11 @@ def fetch_events():
 
     if existing_cache:
         date = existing_cache[config.CACHE_DATE_KEY]
-        if int(time.time()) < date + config.CALENDAR_CACHE_LIFETIME:
+        if datetime.now().timestamp() < date + config.CALENDAR_CACHE_LIFETIME:
             logger.info('fetch_events: using cache')
             return existing_cache[config.CALENDAR_CALENDARS_KEY]
         else:
-            logger.info('fetch_events: cache too old {}'.format(int(time.time()) - date))
+            logger.info('fetch_events: cache too old {}'.format(datetime.now().timestamp() - date))
 
 
     store = CalCalendarStore.defaultCalendarStore()
@@ -67,7 +64,7 @@ def fetch_events():
         formatted_results[cal.title()] = events
 
     cache_dict = {
-        config.CACHE_DATE_KEY: int(time.time()),
+        config.CACHE_DATE_KEY: datetime.now().timestamp(),
         config.CALENDAR_CALENDARS_KEY: formatted_results
     }
     _cache_events(cache_dict)

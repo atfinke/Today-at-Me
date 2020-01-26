@@ -2,7 +2,6 @@ import io
 import json
 import pickle
 import os.path
-
 from datetime import datetime
 
 from googleapiclient.discovery import build
@@ -11,8 +10,8 @@ from google.auth.transport.requests import Request
 from googleapiclient.http import MediaIoBaseDownload
 from html2text import html2text
 
-import config
 from components import logging
+from configuration import config
 
 SCOPES = [
     'https://www.googleapis.com/auth/drive.metadata.readonly',
