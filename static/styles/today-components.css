@@ -1,7 +1,7 @@
 body {
     margin: 0px;
     padding: 0px;
-    min-width: 1100px;
+    min-width: 800px;
     background-color: rgb(22, 22, 22);
     font-family: -apple-system;
 }
@@ -11,7 +11,7 @@ body {
 	flex-direction: row;
 	justify-content: space-evenly;
 	margin: var(--column-margin);
-	margin-top: 25px;
+	margin-top: var(--top-column-margin);
 }
 
 .component-column {
@@ -29,7 +29,7 @@ body {
 .component-container {
 	background-color: rgb(32, 32, 32);
 	border-radius: 10px;
-	margin-bottom: 40px;
+	margin-bottom: var(--column-margin);
 }
 
 .component-container-title {
@@ -82,9 +82,15 @@ body {
 	color: rgb(180, 140, 240);
 }
 
+.container-row-detail-grey-blue {
+	color: rgb(140, 100, 200);
+}
+
 .container-row-detail-grey {
 	color: rgb(187, 187, 187);
 }
+
+
 
 
 .container-single-row {
@@ -99,7 +105,7 @@ body {
 .container-single-row-title {
 	font-weight: 500;
 	font-size: 18pt;
-	color: rgb(220, 220, 220);
+	color: rgb(240, 240, 240);
 }
 
 .container-single-row-detail {
@@ -148,7 +154,7 @@ body {
 }
 
 #spotify-playlist-selection {
-	color: rgb(111, 121, 131);
+	color: rgb(131, 141, 151);
 	font-weight: 500;
 	font-size: 16px;
 	padding: 10px;
@@ -156,7 +162,7 @@ body {
 	background-color: inherit;
 	margin: 0;
 	border-radius: 10px;
-	border-color: rgb(111, 121, 131, 0.5);
+	border-color: rgb(131, 141, 151, 0.5);
 	border-width: 3px;
 	border-style: solid;
 	cursor: pointer;
@@ -178,6 +184,6 @@ body {
 	border-width: 3px;
 	border-style: solid;
 	cursor: pointer;
-	opacity: 0.8;
+	opacity: 0.9;
 	text-align: center;
 }

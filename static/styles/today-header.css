@@ -3,6 +3,7 @@
 	--animation-delay: 2s;
 	--fade-opacity: 0.5;
 	--column-margin: 50px;
+	--top-column-margin: 25px;
 }
 
 #today-header {
@@ -112,7 +113,7 @@
 	width: 74px;
 	border-radius: 10px;
 	overflow: hidden;
-	background-color: red;
+	background-color:rgb(32, 32, 32);
 }
 
 #now-playing-image-overlay {
@@ -130,5 +131,6 @@
 
 #now-playing-image-container img {
     max-width: 100%;
-    border-radius: 10px;
+	border-radius: 10px;
+	visibility: hidden;
 }

@@ -35,79 +35,38 @@
 
 
             
-            {% if classes_component_inner_html %}
-            <div class="component-container">
-                <div class="component-container-title">CLASSES</div>
-                <div class="component-container-tableview">
-                    {{ classes_component_inner_html|safe }}
-                </div>
-            </div>
+            {% if classes_component_html %}
+            {{ classes_component_html|safe }}
             {% else %}
             {% endif %}
 
-            <div class="component-container">
-                <div class="component-container-tableview">
-                    <div class="component-container-tableview-row">
-                        <div class="component-container-tableview-row-title">CS 349</div>
-                        <div class="component-container-tableview-row-detail container-row-detail-green">
-                            DONE
-                        </div>
-                    </div>
-                    <div class="component-container-tableview-row">
-                        <div class="component-container-tableview-row-title">CS 336</div>
-                        <div class="component-container-tableview-row-detail container-row-detail-blue">
-                            T-83:23
-                        </div>
-                    </div>
-                    <div class="component-container-tableview-row">
-                        <div class="component-container-tableview-row-title">
-                            PHYSICS 136-2
-                        </div>
-                        <div class="component-container-tableview-row-detail container-row-detail-grey">
-                            12:50 - 2:00 PM
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {% if office_hours_component_html %}
+            {{ office_hours_component_html|safe }}
+            {% else %}
+            {% endif %}
+
+            {% if life_nu_component_html %}
+            {{ life_nu_component_html|safe }}
+            {% else %}
+            {% endif %}
+            
+            {% if l4a_component_html %}
+            {{ l4a_component_html|safe }}
+            {% else %}
+            {% endif %}
+
+            
         </div>
 
         <div class="component-column">
-            <div class="component-container">
-                <div class="component-container-title">UPCOMING ASSIGNMENTS</div>
-                <div class="component-container-tableview">
-                    <div class="component-container-tableview-row">
-                        <div class="component-container-tableview-row-title">
-                            CS 336: HW3
-                        </div>
-                        <div class="component-container-tableview-row-detail container-row-detail-grey"
-                            data-type="static" data-start-date="Jan 25, 2020 18:00" data-date-format="single-date-day">
-                        </div>
-                    </div>
-                    <div class="component-container-tableview-row">
-                        <div class="component-container-tableview-row-title">
-                            CS 340: HW3
-                        </div>
-                        <div class="component-container-tableview-row-detail container-row-detail-grey"
-                            data-type="static" data-start-date="Jan 26, 2020 18:05" data-date-format="single-date-day">
-                        </div>
-                    </div>
-                    <div class="component-container-tableview-row">
-                        <div class="component-container-tableview-row-title">
-                            CS 336: Midterm
-                        </div>
-                        <div class="component-container-tableview-row-detail container-row-detail-grey"
-                            data-type="static" data-start-date="Jan 27, 2020 18:00" data-date-format="single-date-day">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            {% if theatre_inner_html %}
-            <div class="component-container">
-                <div class="component-container-title">A.THEATRE</div>
-                <div class="component-container-tableview">
-                    {{ theatre_inner_html|safe }}
-                </div>
-            </div>
+            
+            {% if homework_component_html %}
+            {{ homework_component_html|safe }}
+            {% else %}
+            {% endif %}
+            
+            {% if theatre_component_html %}
+            {{ theatre_component_html|safe }}
             {% else %}
             {% endif %}
         </div>
@@ -122,7 +81,7 @@
                 </div>
             </div>
 
-            {% if theatre_inner_html %}
+            {% if weather_inner_html %}
             <div class="component-container">
                 {{ weather_inner_html|safe }}
             </div>
