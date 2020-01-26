@@ -1,20 +1,19 @@
-import config
+import json
+import urllib.request
+from datetime import datetime
 
 import spotipy
-from spotipy.oauth2 import SpotifyClientCredentials
 import spotipy.util as util
-import config
+from spotipy.oauth2 import SpotifyClientCredentials
+
 from components import logging
-import urllib.request
-import json
-import time
+from configuration import config
 
 logger = logging.setup_logger('spotify', config.SPOTIFY_LOGGING_PATH)
 sp = None
 last_downloaded_image_url = None
 memory_playlists_cache = None
-has_new_image = False
-
+destinations_with_image = []
 
 def auth():
     logger.info('auth: called')
@@ -53,15 +52,15 @@ def download_now_playing_image_if_needed(url):
     with open(config.SPOTIFY_IMAGE_PATH, 'wb') as file:
         file.write(response.read())
 
-    global has_new_image
-    has_new_image = True
+    global destinations_with_image
+    destinations_with_image = []
     last_downloaded_image_url = url
 
 
-def prepare_to_send_image():
-    global has_new_image
-    if has_new_image:
-        has_new_image = False
+def prepare_to_send_image(destination):
+    global destinations_with_image
+    if destination not in destinations_with_image:
+        destinations_with_image.append(destination)
         return True
     else:
         return False
@@ -80,12 +79,11 @@ def all_playlists():
 
     if existing_cache:
         date = existing_cache[config.CACHE_DATE_KEY]
-        if int(time.time()) < date + config.SPOTIFY_PLAYLISTS_CACHE_LIFETIME:
+        if datetime.now().timestamp() < date + config.SPOTIFY_PLAYLISTS_CACHE_LIFETIME:
             logger.info('all_playlists: using cache')
             return existing_cache[config.SPOTIFY_PLAYLISTS_KEY]
         else:
-            logger.info('all_playlists: cache too old {}'.format(
-                int(time.time()) - date))
+            logger.info('all_playlists: cache too old {}'.format(datetime.now().timestamp() - date))
 
     formatted_playlists = []
     playlists = sp.user_playlists(config.SPOTIFY_USERNAME)
@@ -98,7 +96,7 @@ def all_playlists():
         len(formatted_playlists)))
 
     cache_dict = {
-        config.CACHE_DATE_KEY: int(time.time()),
+        config.CACHE_DATE_KEY: datetime.now().timestamp(),
         config.SPOTIFY_PLAYLISTS_KEY: formatted_playlists
     }
     _cache_playlists(cache_dict)

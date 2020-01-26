@@ -356,7 +356,9 @@ function spotifyGetNowPlaying() {
       metadata.dataset.playlistUri = response["puri"];
 
       let image = document.getElementById("now-playing-image");
-      image.src = "/spotify/now_playing.jpeg";
+      console.log(image.metadata);
+      
+      image.src = "/spotify/now_playing.jpeg?destination=" + image.dataset.destination;
       image.style.visibility = "visible";
       let imageContainer = document.getElementById(
         "now-playing-image-container"
