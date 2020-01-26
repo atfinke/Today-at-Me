@@ -1,6 +1,5 @@
-import sys
 import objc
-objc.setVerbose(True)
+
 from CalendarStore import CalCalendarStore, CalEvent, CalTask
 from Cocoa import NSDate
 
@@ -44,6 +43,7 @@ def fetch_events():
     for cal in store.calendars():
         if cal.title() in config.CALENDAR_CALENDARS:
             cals.append(cal)
+        logger.info(cal.title())
 
     cst = tz.gettz('America/Chicago')
     today = datetime.utcnow().date()
@@ -80,7 +80,7 @@ def _fetch_cache_events():
     try:
         with open(config.CALENDAR_CACHE_PATH) as data:
             cache = json.load(data)
-            memory_cache = cache_dict
+            memory_cache = cache
             return cache
     except:
         return None
