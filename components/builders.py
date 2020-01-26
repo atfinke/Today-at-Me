@@ -113,6 +113,26 @@ def _build_calendar_component(name, events, data_type, date_format):
     return template.format(name=name, inner_html=inner_html)
 
 
+def build_monitor_component():
+    return '''
+     <div class="component-container">
+        <div class="component-container-tableview">
+            <div class="component-container-tableview-row">
+                <div class="component-container-tableview-row-title">CPU</div>
+                <div id="monitor-cpu" class="component-container-tableview-row-detail"></div>
+            </div>
+            <div class="component-container-tableview-row">
+                <div class="component-container-tableview-row-title">Memory</div>
+                <div id="monitor-memory" class="component-container-tableview-row-detail"></div>
+            </div>
+            <div class="component-container-tableview-row">
+                <div class="component-container-tableview-row-title">Battery</div>
+                <div id="monitor-battery" class="component-container-tableview-row-detail"></div>
+            </div>
+        </div>
+    </div>
+    '''
+
 def build_classes_component():
     events_today = []
     events = calendar.fetch_events()['NU Classes']

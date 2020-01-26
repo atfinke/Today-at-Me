@@ -8,6 +8,7 @@ import components.logging as logging
 import components.spotify as spotify
 import components.calendar as calendar
 import components.google as google
+import components.monitor as monitor
 import components.builders as builders
 
 import background.displays as displays
@@ -36,9 +37,14 @@ def today():
     life_nu_component_html=builders.build_life_nu_component(),
     l4a_component_html=builders.build_l4a_component(),
     homework_component_html=builders.build_homework_component(),
-    theatre_component_html=builders.build_theatre_component(), 
+    theatre_component_html=builders.build_theatre_component(),
+    monitor_component_html=builders.build_monitor_component(),
     weather_inner_html=builders.build_weather_component_inner_html())
 
+
+@app.route("/monitor/now", methods=["GET"])
+def monitor_now():
+    return jsonify(monitor.fetch_stats()), 200
 
 @app.route("/spotify/now_playing", methods=["GET"])
 def spotify_now_playing():

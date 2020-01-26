@@ -104,6 +104,7 @@ function updateContainerRowDetailColor(element, colorClass) {
   element.classList.remove("container-row-detail-blue");
   element.classList.remove("container-row-detail-grey");
   element.classList.remove("container-row-detail-grey-blue");
+  element.classList.remove("container-row-detail-red");
   element.classList.add(colorClass);
 }
 
@@ -331,6 +332,14 @@ function spotifyPlaylistRemoveButtonClicked() {
 }
 
 function spotifyGetNowPlaying() {
+  let metadata = document.getElementById("now-playing-metadata");
+
+  let songElement = document.getElementById("now-playing-song")
+  let playlistElement = document.getElementById("now-playing-playlist")
+  let imageElement = document.getElementById("now-playing-image");
+  let buttonElement = document.getElementById("spotify-playlist-selection-button")
+  let imageContainer = document.getElementById("now-playing-image-container");
+
   let xhr = new XMLHttpRequest();
   xhr.open("GET", "/spotify/now_playing", true);
   xhr.onreadystatechange = function() {
@@ -338,49 +347,79 @@ function spotifyGetNowPlaying() {
 
     let response = JSON.parse(this.responseText);
     if (this.status == 200 && "tn" in response && response["tn"] != undefined) {
-      let metadata = document.getElementById("now-playing-metadata");
-
+      
       if (
         metadata.dataset.trackUri != response["turi"] ||
         metadata.dataset.playlistUri != response["puri"]
       ) {
-        document.getElementById("spotify-playlist-selection-button").innerHTML =
-          "ADD";
+        buttonElement.innerHTML = "ADD";
       }
 
-      document.getElementById("now-playing-song").innerHTML = response["tn"];
-      document.getElementById("now-playing-playlist").innerHTML =
-        response["pn"];
+      songElement.innerHTML = response["tn"];
+      playlistElement.innerHTML = response["pn"];
 
       metadata.dataset.trackUri = response["turi"];
       metadata.dataset.playlistUri = response["puri"];
 
-      let image = document.getElementById("now-playing-image");
-      console.log(image.metadata);
-      
-      image.src = "/spotify/now_playing.jpeg?destination=" + image.dataset.destination;
-      image.style.visibility = "visible";
-      let imageContainer = document.getElementById(
-        "now-playing-image-container"
-      );
+      imageElement.src = "/spotify/now_playing.jpeg?destination=" + imageElement.dataset.destination;
+      imageElement.style.visibility = "visible";
       imageContainer.style.backgroundColor = "red";
     } else {
-      document.getElementById("now-playing-song").innerHTML = "Not Playing";
-      document.getElementById("now-playing-playlist").innerHTML = "-";
-      let metadata = document.getElementById("now-playing-metadata");
+      songElement.innerHTML = "Not Playing";
+      playlistElement.innerHTML = "-";
+
       metadata.dataset.trackUri = "";
       metadata.dataset.playlistUri = "";
 
-      let image = document.getElementById("now-playing-image");
-      image.src = "/spotify/now_playing.jpeg";
-      image.style.visibility = "hidden";
-      let imageContainer = document.getElementById(
-        "now-playing-image-container"
-      );
+      imageElement.src = "/spotify/now_playing.jpeg";
+      imageElement.style.visibility = "hidden";
       imageContainer.style.backgroundColor = "rgb(32, 32, 32)";
     }
   };
   xhr.send();
+}
+
+function colorForAmount(element, amount) {
+  if (amount > 80) {
+    updateContainerRowDetailColor(element, "container-row-detail-red");
+  } else if (amount > 70) {
+    updateContainerRowDetailColor(element, "container-row-detail-blue");
+  } else if (amount > 60) {
+    updateContainerRowDetailColor(element, "container-row-detail-grey-blue");
+  } else if (amount > 30) {
+    updateContainerRowDetailColor(element, "container-row-detail-grey");
+  } else {
+    updateContainerRowDetailColor(element, "container-row-detail-green");
+  }
+}
+
+function getMonitorUpdate() {
+  let cpuElement = document.getElementById("monitor-cpu")
+  let memoryElement = document.getElementById("monitor-memory")
+  let batteryElement = document.getElementById("monitor-battery")
+
+  let xhr = new XMLHttpRequest();
+  xhr.open("GET", "/monitor/now", true);
+  xhr.onreadystatechange = function() {
+    if (this.readyState != 4) return;
+
+    let response = JSON.parse(this.responseText);
+    if (this.status == 200) {
+      let cpu = response['cpu']
+      cpuElement.innerHTML = cpu + '%';
+      colorForAmount(cpuElement, cpu);
+
+      let mem = response['mem']
+      memoryElement.innerHTML = mem + '%';
+      colorForAmount(memoryElement, mem)
+
+      let bat = response['bat-l']
+      batteryElement.innerHTML = bat + '%';
+      colorForAmount(batteryElement, 1 - bat)
+    }
+  };
+  xhr.send();
+  setTimeout(function() { getMonitorUpdate(); }, 2000 + (Math.random() * 2500));
 }
 
 function windowResized() {
@@ -425,7 +464,10 @@ function start() {
 
   updateWeather();
 
+  spotifyGetNowPlaying();
   setInterval(spotifyGetNowPlaying, 1000);
+
+  getMonitorUpdate();
 
   windowResized();
   window.onresize = windowResized;

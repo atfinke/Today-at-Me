@@ -90,6 +90,10 @@ body {
 	color: rgb(187, 187, 187);
 }
 
+.container-row-detail-red {
+	color: rgb(192, 64, 56);
+}
+
 
 
 
@@ -97,8 +101,8 @@ body {
 	display: flex;
 	flex-direction: row;
 	justify-content: space-between;
-	margin: 10px 20px;
-	height: 56px;
+	margin: 10px 15px;
+	height: 42px;
 	align-items: center;
 }
 
@@ -155,15 +159,15 @@ body {
 
 #spotify-playlist-selection {
 	color: rgb(131, 141, 151);
-	font-weight: 500;
-	font-size: 16px;
-	padding: 10px;
+	font-weight: 450;
+	font-size: 14px;
+	padding: 6px 10px;
 	width: 100%;
 	background-color: inherit;
 	margin: 0;
 	border-radius: 10px;
 	border-color: rgb(131, 141, 151, 0.5);
-	border-width: 3px;
+	border-width: 2px;
 	border-style: solid;
 	cursor: pointer;
 	-webkit-appearance: none;
@@ -174,14 +178,14 @@ body {
 #spotify-playlist-selection-button {
 	color: white;
 	font-weight: 450;
-	font-size: 14px;
+	font-size: 12px;
 	margin: 0px;
 	margin-left: 20px;
-	padding: 10px 30px;
+	padding: 6px 30px;
 	width: 90px;
 	border-radius: 10px;
 	border-color: rgb(103, 173, 91);
-	border-width: 3px;
+	border-width: 2px;
 	border-style: solid;
 	cursor: pointer;
 	opacity: 0.9;

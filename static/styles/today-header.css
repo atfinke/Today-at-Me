@@ -89,6 +89,7 @@
 	margin-right: var(--column-margin);
 	justify-content: center;
 	align-items: center;
+	max-width: 50%;
 }
 
 #now-playing-metadata {
@@ -111,6 +112,7 @@
 
 #now-playing-image-container {
 	width: 74px;
+	min-width: 74px;
 	border-radius: 10px;
 	overflow: hidden;
 	background-color:rgb(32, 32, 32);
