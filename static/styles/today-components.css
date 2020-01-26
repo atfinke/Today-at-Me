@@ -1,0 +1,183 @@
+body {
+    margin: 0px;
+    padding: 0px;
+    min-width: 1100px;
+    background-color: rgb(22, 22, 22);
+    font-family: -apple-system;
+}
+
+#component-column-collection {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-evenly;
+	margin: var(--column-margin);
+	margin-top: 25px;
+}
+
+.component-column {
+	margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+	flex: 1 1 0px;
+}
+
+.component-column:nth-child(2) {
+	margin-left: var(--column-margin);
+	margin-right: var(--column-margin);
+}
+
+.component-container {
+	background-color: rgb(32, 32, 32);
+	border-radius: 10px;
+	margin-bottom: 40px;
+}
+
+.component-container-title {
+	color: rgb(190, 190, 190);
+	text-align: center;
+	font-weight: 600;
+	font-size: 13px;
+	margin-top: 15px;
+}
+
+.component-container-tableview {
+	display: flex;
+	flex-direction: column;
+	margin: 5px 15px 15px 15px;
+}
+
+.component-container-tableview-row {
+	align-items: center;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	margin: 0px;
+	padding: 0px;
+	margin-top: 10px;
+}
+
+.component-container-tableview-row-title {
+	color: white;
+	font-weight: 450;
+	font-size: 16px;
+	margin: 0px;
+	padding: 0px;
+}
+
+.component-container-tableview-row-detail {
+	font-weight: 450;
+	font-size: 15px;
+	margin: 0px;
+	padding: 0px;
+	margin-left: 30px;
+	font-variant-numeric: tabular-nums;
+	flex-shrink: 0;
+}
+
+.container-row-detail-green {
+	color: rgb(103, 173, 91);
+}
+
+.container-row-detail-blue {
+	color: rgb(180, 140, 240);
+}
+
+.container-row-detail-grey {
+	color: rgb(187, 187, 187);
+}
+
+
+.container-single-row {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	margin: 10px 20px;
+	height: 56px;
+	align-items: center;
+}
+
+.container-single-row-title {
+	font-weight: 500;
+	font-size: 18pt;
+	color: rgb(220, 220, 220);
+}
+
+.container-single-row-detail {
+	font-weight: 500;
+	font-size: 18pt;
+	color: rgb(109, 119, 139);
+}
+
+
+.color-countdown {
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	margin: 10px 20px;
+}
+
+.color-countdown-digit {
+	font-weight: 500;
+	font-size: 26pt;
+	font-variant-numeric: tabular-nums;
+}
+
+.color-countdown-days {
+	color: rgb(94, 192, 112);
+}
+
+.color-countdown-hours {
+	color: rgb(221, 88, 91);
+}
+
+.color-countdown-min {
+	color: rgb(126, 127, 236);
+}
+
+.color-countdown-sec {
+	color: rgb(236, 66, 150);
+}
+
+.weather-container {
+    opacity: 0.2;
+    transition: 0.25s ease-in-out;
+}
+
+#spotify-add-to-playlist {
+	transition: 0.25s ease-in-out;
+}
+
+#spotify-playlist-selection {
+	color: rgb(111, 121, 131);
+	font-weight: 500;
+	font-size: 16px;
+	padding: 10px;
+	width: 100%;
+	background-color: inherit;
+	margin: 0;
+	border-radius: 10px;
+	border-color: rgb(111, 121, 131, 0.5);
+	border-width: 3px;
+	border-style: solid;
+	cursor: pointer;
+	-webkit-appearance: none;
+	appearance: none;
+	outline: none;
+}
+
+#spotify-playlist-selection-button {
+	color: white;
+	font-weight: 450;
+	font-size: 14px;
+	margin: 0px;
+	margin-left: 20px;
+	padding: 10px 30px;
+	width: 90px;
+	border-radius: 10px;
+	border-color: rgb(103, 173, 91);
+	border-width: 3px;
+	border-style: solid;
+	cursor: pointer;
+	opacity: 0.8;
+	text-align: center;
+}

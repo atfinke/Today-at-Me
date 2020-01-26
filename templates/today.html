@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Today at Andrew</title>
+  <script src="{{ url_for('static',filename='scripts/today.js') }}"></script>
+  <link rel="stylesheet" href="{{ url_for('static',filename='styles/today-header.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static',filename='styles/today-components.css') }}">
+</head>
+
+<body onload="start()">
+    <div id="today-header">
+        <div id="header-today-column">
+            <div id="header-today-title">
+                Today at <span id="today-title-a">A</span><span id="today-title-n">n</span><span
+                    id="today-title-d">d</span><span id="today-title-r">r</span><span id="today-title-e">e</span><span
+                    id="today-title-w">w</span>
+            </div>
+            <div id="header-today-date"></div>
+        </div>
+        <div id="header-now-playing-column">
+            {% if header_now_playing_column_inner_html %}
+            {{ header_now_playing_column_inner_html|safe }}
+            {% else %}
+            {% endif %}
+        </div>
+    </div>
+
+   
+    <div id="component-column-collection">
+        <div class="component-column">
+
+
+
+
+            
+            {% if classes_component_inner_html %}
+            <div class="component-container">
+                <div class="component-container-title">CLASSES</div>
+                <div class="component-container-tableview">
+                    {{ classes_component_inner_html|safe }}
+                </div>
+            </div>
+            {% else %}
+            {% endif %}
+
+            <div class="component-container">
+                <div class="component-container-tableview">
+                    <div class="component-container-tableview-row">
+                        <div class="component-container-tableview-row-title">CS 349</div>
+                        <div class="component-container-tableview-row-detail container-row-detail-green">
+                            DONE
+                        </div>
+                    </div>
+                    <div class="component-container-tableview-row">
+                        <div class="component-container-tableview-row-title">CS 336</div>
+                        <div class="component-container-tableview-row-detail container-row-detail-blue">
+                            T-83:23
+                        </div>
+                    </div>
+                    <div class="component-container-tableview-row">
+                        <div class="component-container-tableview-row-title">
+                            PHYSICS 136-2
+                        </div>
+                        <div class="component-container-tableview-row-detail container-row-detail-grey">
+                            12:50 - 2:00 PM
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="component-column">
+            <div class="component-container">
+                <div class="component-container-title">UPCOMING ASSIGNMENTS</div>
+                <div class="component-container-tableview">
+                    <div class="component-container-tableview-row">
+                        <div class="component-container-tableview-row-title">
+                            CS 336: HW3
+                        </div>
+                        <div class="component-container-tableview-row-detail container-row-detail-grey"
+                            data-type="static" data-start-date="Jan 25, 2020 18:00" data-date-format="single-date-day">
+                        </div>
+                    </div>
+                    <div class="component-container-tableview-row">
+                        <div class="component-container-tableview-row-title">
+                            CS 340: HW3
+                        </div>
+                        <div class="component-container-tableview-row-detail container-row-detail-grey"
+                            data-type="static" data-start-date="Jan 26, 2020 18:05" data-date-format="single-date-day">
+                        </div>
+                    </div>
+                    <div class="component-container-tableview-row">
+                        <div class="component-container-tableview-row-title">
+                            CS 336: Midterm
+                        </div>
+                        <div class="component-container-tableview-row-detail container-row-detail-grey"
+                            data-type="static" data-start-date="Jan 27, 2020 18:00" data-date-format="single-date-day">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% if theatre_inner_html %}
+            <div class="component-container">
+                <div class="component-container-title">A.THEATRE</div>
+                <div class="component-container-tableview">
+                    {{ theatre_inner_html|safe }}
+                </div>
+            </div>
+            {% else %}
+            {% endif %}
+        </div>
+
+        <div class="component-column">
+            <div class="component-container">
+                <div id="countdown-XYZ" class="container-single-row color-countdown">
+                    <div class="color-countdown-digit color-countdown-days"></div>
+                    <div class="color-countdown-digit color-countdown-hours"></div>
+                    <div class="color-countdown-digit color-countdown-min"></div>
+                    <div class="color-countdown-digit color-countdown-sec"></div>
+                </div>
+            </div>
+
+            {% if theatre_inner_html %}
+            <div class="component-container">
+                {{ weather_inner_html|safe }}
+            </div>
+            {% else %}
+            {% endif %}
+            
+            {% if spotify_add_to_playlist_inner_html %}
+            <div class="component-container">
+                {{ spotify_add_to_playlist_inner_html|safe }}
+            </div>
+            {% else %}
+            {% endif %}
+        </div>
+    </div>
+</body>
+
+</html>

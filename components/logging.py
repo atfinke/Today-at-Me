@@ -5,6 +5,7 @@ import config
 
 def setup_logger(name, log_file):
     Path(config.LOGGING_DATA_PATH).mkdir(parents=True, exist_ok=True)
+    Path(config.CACHE_DATA_PATH).mkdir(parents=True, exist_ok=True)
 
     handler = logging.FileHandler(log_file) 
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')

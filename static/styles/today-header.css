@@ -1,0 +1,134 @@
+:root {
+	--animation-time: 2s;
+	--animation-delay: 2s;
+	--fade-opacity: 0.5;
+	--column-margin: 50px;
+}
+
+#today-header {
+	background-color: rgb(18, 18, 18);
+	display: flex;
+	flex-direction: row;
+	font-family: -apple-system;
+	justify-content: space-between;
+}
+
+
+#header-today-column {
+	margin: 40px 0px;
+	margin-left: var(--column-margin);
+}
+
+#header-today-title {
+	color: white;
+	font-weight: 600;
+	font-size: 36px;
+	margin: 0px;
+	padding: 0px;
+}
+
+#header-today-date {
+	color: rgb(187, 187, 187);
+	font-weight: 500;
+	font-size: 20px;
+	margin-top: 5px;
+}
+
+
+@keyframes fade {
+	0% {
+		opacity: 1;
+	}
+	100% {
+		opacity: var(--fade-opacity);
+	}
+}
+
+#today-title-a {
+	color: #5ebd3e;
+	animation: fade var(--animation-time) ease-in-out alternate infinite;
+	animation-delay: var(--animation-delay);
+}
+
+#today-title-n {
+	color: #ffb900;
+	animation: fade var(--animation-time) ease-in-out alternate infinite;
+	animation-delay: var(--animation-delay);
+}
+
+#today-title-d {
+	color: #f78200;
+	animation: fade var(--animation-time) ease-in-out alternate infinite;
+	animation-delay: var(--animation-delay);
+}
+
+#today-title-r {
+	color: #e23838;
+	animation: fade var(--animation-time) ease-in-out alternate infinite;
+	animation-delay: var(--animation-delay);
+}
+
+#today-title-e {
+	color: #973999;
+	animation: fade var(--animation-time) ease-in-out alternate infinite;
+	animation-delay: var(--animation-delay);
+}
+
+#today-title-w {
+	color: #009cdf;
+	animation: fade var(--animation-time) ease-in-out alternate infinite;
+	animation-delay: var(--animation-delay);
+}
+
+
+#header-now-playing-column {
+	display: flex;
+	flex-direction: row;
+	margin: 40px 0px;
+	margin-right: var(--column-margin);
+	justify-content: center;
+	align-items: center;
+}
+
+#now-playing-metadata {
+	margin-right: 20px;
+}
+
+#now-playing-playlist {
+	color: rgb(187, 187, 187);
+	font-weight: 500;
+	font-size: 18px;
+	text-align: right;
+}
+
+#now-playing-song {
+	color: white;
+	font-weight: 600;
+	font-size: 24px;
+	text-align: right;
+}
+
+#now-playing-image-container {
+	width: 74px;
+	border-radius: 10px;
+	overflow: hidden;
+	background-color: red;
+}
+
+#now-playing-image-overlay {
+	position: relative;
+	width: 100%;
+	height: 74px;
+	opacity: 1;
+	z-index: 2;
+	transition: 0.25s ease-in-out;
+}
+
+#now-playing-image-overlay:hover {
+	opacity: 0.2;
+}
+
+#now-playing-image-container img {
+    max-width: 100%;
+    border-radius: 10px;
+}

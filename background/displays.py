@@ -69,7 +69,7 @@ def __open_system_preferences_script():
 
 
 def __system_events_script(is_connected_to_external_display):
-    opposite_of_hide_menu_bar = 'true' if is_connected_to_external_display else 'false'
+    hide_menu_bar = 'true' if is_connected_to_external_display else 'false'
     hide_dock = 'false' if is_connected_to_external_display else 'true'
     return '''
     tell application "System Events"
@@ -80,4 +80,4 @@ def __system_events_script(is_connected_to_external_display):
         end tell
         set the autohide of the dock preferences to {}
     end tell
-    '''.format(opposite_of_hide_menu_bar, hide_dock)
+    '''.format(hide_menu_bar, hide_dock)
