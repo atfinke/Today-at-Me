@@ -3,11 +3,24 @@ import secrets
 CACHE_DATE_KEY = 'date'
 
 TODAY_DATA_PATH = './user-data'
-BACKGROUND_TASKS_DATA_PATH = TODAY_DATA_PATH + '/background'
 LOGGING_DATA_PATH = TODAY_DATA_PATH + '/logging'
 CACHE_DATA_PATH = TODAY_DATA_PATH + '/cache'
 
 DISPLAYS_LOGGING_PATH = LOGGING_DATA_PATH + '/displays.log'
+
+GOOGLE_ASSIGNMENTS_KEY = 'assignments'
+GOOGLE_CACHE_PATH = CACHE_DATA_PATH + '/homework.json'
+GOOGLE_CACHE_LIFETIME = 120
+GOOGLE_AUTH_PATH = CACHE_DATA_PATH + '/google_auth'
+GOOGLE_CREDIENTALS_PATH = 'secrets-google-credentials.json'
+GOOGLE_LOGGING_PATH = LOGGING_DATA_PATH + '/google.log'
+GOOGLE_HOMEWORK_DOC_ID = '1RtAUOrqs8wJgkiYOi4mYyfAiA823Mhcc8X4JWMlf5wk'
+GOOGLE_HOMEWORK_DOC_REPLACEMENT = {
+    'COMP_SCI 336-0 - Design & Analysis of Algorithms:\n': '<class>CS 336',
+    'COMP_SCI 340-0 - Introduction to Networking:\n': '<class>CS 340',
+    'COMP_SCI 349-0 - Machine Learning:\n': '<class>CS 349',
+    'PHYSICS 136-2 - General Physics Laboratory:\n': '<class>PHYSICS 136',
+}
 
 CALENDAR_CACHE_PATH = CACHE_DATA_PATH + '/calendar.json'
 CALENDAR_CACHE_LIFETIME = 120

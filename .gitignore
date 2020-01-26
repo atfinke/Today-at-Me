@@ -131,4 +131,4 @@ dmypy.json
 .DS_Store
 user-data/
 secrets.py
-.cache-j3d1_warr10r
+secrets-google-credentials.json
