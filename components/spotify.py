@@ -56,6 +56,9 @@ def download_now_playing_image_if_needed(url):
     destinations_with_image = []
     last_downloaded_image_url = url
 
+    # generally only happens 2-5 min
+    sp.auth()
+
 
 def prepare_to_send_image(destination):
     global destinations_with_image

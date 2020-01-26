@@ -76,13 +76,13 @@ def spotify_remove_track():
 
 def _configure_for_connected_display():
     displays.configure_for_connected_display()
-    threading.Timer(5.0, _configure_for_connected_display).start()
+    # threading.Timer(5.0, _configure_for_connected_display).start()
 
 def _prep_caches():
     spotify.all_playlists()
     google.fetch_homework()
     calendar.fetch_events()
-    threading.Timer(60.0, _prep_caches).start()
+    # threading.Timer(60.0, _prep_caches).start()
 
 
 spotify.auth()
@@ -98,5 +98,5 @@ if __name__ == '__main__':
     # args = parser.parse_args()
 
     # # spotify.all_playlist_names()
-    _configure_for_connected_display()
+    # _configure_for_connected_display()
     app.run(host='127.0.0.1', port=8080, debug=True)

@@ -44,16 +44,149 @@ dependencies:
   - xz=5.2.4=h1de35cc_4
   - zlib=1.2.11=h1de35cc_3
   - pip:
-    - arrow==0.15.5
+    - beautifulsoup4==4.8.2
+    - bs4==0.0.1
+    - cachetools==4.0.0
+    - caldav==0.6.2
     - click==6.7
     - future==0.18.2
-    - ics==0.6
+    - google-api-python-client==1.7.11
+    - google-auth==1.11.0
+    - google-auth-httplib2==0.0.3
+    - google-auth-oauthlib==0.4.1
+    - html2text==2020.1.16
+    - httplib2==0.17.0
     - keyring==8.7
     - keyrings-alt==1.3
+    - lxml==4.4.2
+    - oauthlib==3.1.0
+    - pyasn1==0.4.8
+    - pyasn1-modules==0.2.8
     - pyicloud==0.9.2
+    - pyobjc==6.1
+    - pyobjc-core==6.1
+    - pyobjc-framework-accounts==6.1
+    - pyobjc-framework-addressbook==6.1
+    - pyobjc-framework-adsupport==6.1
+    - pyobjc-framework-applescriptkit==6.1
+    - pyobjc-framework-applescriptobjc==6.1
+    - pyobjc-framework-applicationservices==6.1
+    - pyobjc-framework-authenticationservices==6.1
+    - pyobjc-framework-automator==6.1
+    - pyobjc-framework-avfoundation==6.1
+    - pyobjc-framework-avkit==6.1
+    - pyobjc-framework-businesschat==6.1
+    - pyobjc-framework-calendarstore==6.1
+    - pyobjc-framework-cfnetwork==6.1
+    - pyobjc-framework-cloudkit==6.1
+    - pyobjc-framework-cocoa==6.1
+    - pyobjc-framework-collaboration==6.1
+    - pyobjc-framework-colorsync==6.1
+    - pyobjc-framework-contacts==6.1
+    - pyobjc-framework-contactsui==6.1
+    - pyobjc-framework-coreaudio==6.1
+    - pyobjc-framework-coreaudiokit==6.1
+    - pyobjc-framework-corebluetooth==6.1
+    - pyobjc-framework-coredata==6.1
+    - pyobjc-framework-corehaptics==6.1
+    - pyobjc-framework-corelocation==6.1
+    - pyobjc-framework-coremedia==6.1
+    - pyobjc-framework-coremediaio==6.1
+    - pyobjc-framework-coreml==6.1
+    - pyobjc-framework-coremotion==6.1
+    - pyobjc-framework-coreservices==6.1
+    - pyobjc-framework-corespotlight==6.1
+    - pyobjc-framework-coretext==6.1
+    - pyobjc-framework-corewlan==6.1
+    - pyobjc-framework-cryptotokenkit==6.1
+    - pyobjc-framework-devicecheck==6.1
+    - pyobjc-framework-dictionaryservices==6.1
+    - pyobjc-framework-discrecording==6.1
+    - pyobjc-framework-discrecordingui==6.1
+    - pyobjc-framework-diskarbitration==6.1
+    - pyobjc-framework-dvdplayback==6.1
+    - pyobjc-framework-eventkit==6.1
+    - pyobjc-framework-exceptionhandling==6.1
+    - pyobjc-framework-executionpolicy==6.1
+    - pyobjc-framework-externalaccessory==6.1
+    - pyobjc-framework-fileprovider==6.1
+    - pyobjc-framework-fileproviderui==6.1
+    - pyobjc-framework-findersync==6.1
+    - pyobjc-framework-fsevents==6.1
+    - pyobjc-framework-gamecenter==6.1
+    - pyobjc-framework-gamecontroller==6.1
+    - pyobjc-framework-gamekit==6.1
+    - pyobjc-framework-gameplaykit==6.1
+    - pyobjc-framework-imagecapturecore==6.1
+    - pyobjc-framework-imserviceplugin==6.1
+    - pyobjc-framework-inputmethodkit==6.1
+    - pyobjc-framework-installerplugins==6.1
+    - pyobjc-framework-instantmessage==6.1
+    - pyobjc-framework-intents==6.1
+    - pyobjc-framework-iosurface==6.1
+    - pyobjc-framework-ituneslibrary==6.1
+    - pyobjc-framework-latentsemanticmapping==6.1
+    - pyobjc-framework-launchservices==6.1
+    - pyobjc-framework-libdispatch==6.1
+    - pyobjc-framework-linkpresentation==6.1
+    - pyobjc-framework-localauthentication==6.1
+    - pyobjc-framework-mapkit==6.1
+    - pyobjc-framework-mediaaccessibility==6.1
+    - pyobjc-framework-medialibrary==6.1
+    - pyobjc-framework-mediaplayer==6.1
+    - pyobjc-framework-mediatoolbox==6.1
+    - pyobjc-framework-metalkit==6.1
+    - pyobjc-framework-modelio==6.1
+    - pyobjc-framework-multipeerconnectivity==6.1
+    - pyobjc-framework-naturallanguage==6.1
+    - pyobjc-framework-netfs==6.1
+    - pyobjc-framework-network==6.1
+    - pyobjc-framework-networkextension==6.1
+    - pyobjc-framework-notificationcenter==6.1
+    - pyobjc-framework-opendirectory==6.1
+    - pyobjc-framework-osakit==6.1
+    - pyobjc-framework-oslog==6.1
+    - pyobjc-framework-pencilkit==6.1
+    - pyobjc-framework-photos==6.1
+    - pyobjc-framework-photosui==6.1
+    - pyobjc-framework-preferencepanes==6.1
+    - pyobjc-framework-pubsub==6.1
+    - pyobjc-framework-pushkit==6.1
+    - pyobjc-framework-quartz==6.1
+    - pyobjc-framework-quicklookthumbnailing==6.1
+    - pyobjc-framework-safariservices==6.1
+    - pyobjc-framework-scenekit==6.1
+    - pyobjc-framework-screensaver==6.1
+    - pyobjc-framework-scriptingbridge==6.1
+    - pyobjc-framework-searchkit==6.1
+    - pyobjc-framework-security==6.1
+    - pyobjc-framework-securityfoundation==6.1
+    - pyobjc-framework-securityinterface==6.1
+    - pyobjc-framework-servicemanagement==6.1
+    - pyobjc-framework-social==6.1
+    - pyobjc-framework-soundanalysis==6.1
+    - pyobjc-framework-speech==6.1
+    - pyobjc-framework-spritekit==6.1
+    - pyobjc-framework-storekit==6.1
+    - pyobjc-framework-syncservices==6.1
+    - pyobjc-framework-systemconfiguration==6.1
+    - pyobjc-framework-systemextensions==6.1
+    - pyobjc-framework-usernotifications==6.1
+    - pyobjc-framework-videosubscriberaccount==6.1
+    - pyobjc-framework-videotoolbox==6.1
+    - pyobjc-framework-vision==6.1
+    - pyobjc-framework-webkit==6.1
     - python-dateutil==2.8.1
+    - python-engineio==3.11.2
+    - python-socketio==4.4.0
     - pytz==2019.3
+    - requests-oauthlib==1.3.0
+    - rsa==4.0
+    - soupsieve==1.9.5
+    - spotipy==2.7.1
     - tatsu==4.4.0
     - tzlocal==2.0.0
+    - uritemplate==3.0.1
+    - vobject==0.9.6.1
 prefix: /Users/andrewfinke/opt/miniconda3/envs/today
 
