@@ -58,7 +58,7 @@ function configureNameAnimations() {
     const element = document.getElementById("today-title-" + letter);
     const randomTime = 1 + Math.random() * 8;
     element.style.setProperty("--animation-time", randomTime + "s");
-    const randomDelayTime = 1 + Math.random() * 10;
+    const randomDelayTime = 1 + Math.random() * 5;
     element.style.setProperty("--animation-delay", randomDelayTime + "s");
     const randomOpacity = 0.2 + Math.random() * 0.4;
     element.style.setProperty("--fade-opacity", randomOpacity);
