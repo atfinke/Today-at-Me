@@ -81,3 +81,4 @@ def __system_events_script(is_connected_to_external_display):
         set the autohide of the dock preferences to {}
     end tell
     '''.format(hide_menu_bar, hide_dock)
+    
