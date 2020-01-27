@@ -132,3 +132,4 @@ dmypy.json
 user-data/
 configuration/secrets.py
 configuration/secrets-google-credentials.json
+nohup.out

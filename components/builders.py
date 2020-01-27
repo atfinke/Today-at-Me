@@ -6,6 +6,7 @@ import components.spotify as spotify
 import components.calendar as calendar
 import components.google as google
 import components.lastfm as lastfm
+import components.theme_parks as theme_parks
 import components.logging as logging
 
 from configuration import config
@@ -111,8 +112,41 @@ def build_lastfm_component():
     for track in tracks:
         id = random.randint(1, 100_000_000)
         inner_html += track_template.format(id=id, name=track['name'], count=track['count'], data_name=track['name'], data_artist=track['artist'])
-    return template.format(name='TOP TRACKS THIS WEEK', inner_html=inner_html)
+    return template.format(name='TOP TRACKS LAST WEEK', inner_html=inner_html)
 
+def build_theme_park_component():
+    template = '''
+     <div class="component-container">
+        <div class="component-container-title">{name}</div>
+        <div class="component-container-tableview">
+            {inner_html}
+        </div>
+    </div>
+    '''
+    
+    ride_template = '''
+    <div class="component-container-tableview-row">
+        <div class="component-container-tableview-row-title">
+            {name}
+        </div>
+        <div class="component-container-tableview-row-detail container-row-detail-{color}">
+            {time}
+        </div>
+    </div>
+
+    '''
+
+    rides = theme_parks.fetch_wait_times()
+    rides = sorted(rides, key = lambda i: int(i['waitTime']), reverse=True) 
+
+    if len(rides) == 0 or int(rides[0]['waitTime']) == 0:
+        return None
+
+    inner_html = ''
+    for ride in rides[:5]:
+        color = 'red' if ride['waitTime'] > 120 else 'grey'
+        inner_html += ride_template.format(name=ride['name'], time=ride['waitTime'], color=color)
+    return template.format(name='WAIT TIMES', inner_html=inner_html)
 
 def _build_calendar_component(name, events, data_type, date_format):
     template = '''

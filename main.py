@@ -10,6 +10,7 @@ import components.google as google
 import components.monitor as monitor
 import components.lastfm as lastfm
 import components.builders as builders
+import components.theme_parks as theme_parks
 
 import background.displays as displays
 
@@ -38,6 +39,7 @@ def today():
     lastfm_component_html=builders.build_lastfm_component(),
     homework_component_html=builders.build_homework_component(),
     theatre_component_html=builders.build_theatre_component(),
+    theme_park_component_html=builders.build_theme_park_component(),
     monitor_component_html=builders.build_monitor_component(),
     weather_inner_html=builders.build_weather_component_inner_html())
 
@@ -90,6 +92,7 @@ def _prep_caches():
     google.fetch_homework()
     calendar.fetch_events()
     lastfm.fetch_tracks()
+    theme_parks.fetch_wait_times()
     threading.Timer(120.0, _prep_caches).start()
 
 _prep_auth()
