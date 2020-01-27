@@ -1,5 +1,7 @@
 # Today at Me
 
+![screenshot](https://raw.githubusercontent.com/atfinke/Today-at-Me/master/resources/final_screenshot.png)
+
 ### Overview
 
 My local homepage + background processing server. This is inspired by years of side projects (and/or makes use of them in some capacity) such as, but not limited to:
