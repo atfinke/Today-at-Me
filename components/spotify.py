@@ -19,14 +19,14 @@ def auth():
     logger.info('auth: called')
 
     global sp
-    scope = 'user-read-playback-state user-modify-playback-state playlist-modify-public user-read-currently-playing playlist-read-private playlist-modify-private'
+    scope = 'user-read-playback-state user-modify-playback-state playlist-modify-public user-read-currently-playing playlist-read-private playlist-modify-private user-top-read'
     token = util.prompt_for_user_token(config.SPOTIFY_USERNAME, scope, client_id=config.SPOTIFY_CLIENT_ID,
                                        client_secret=config.SPOTIFY_CLIENT_SECRET, redirect_uri=config.SPOTIFY_REDIRECT_URI, cache_path=config.SPOTIFY_AUTH_CACHE_PATH)
     sp = spotipy.Spotify(auth=token)
     logger.info('auth: done')
 
-
 def now_playing_info():
+    auth()
     global sp
     track = sp.currently_playing()
     if not track:
@@ -38,8 +38,14 @@ def now_playing_info():
             download_now_playing_image_if_needed(image['url'])
             break
 
-    playlist_uri = track['context']['uri']
-    playlist_name = sp.playlist(playlist_uri)['name']
+    playlist_uri = None
+    playlist_name = '-'
+
+    if 'context' in track and track['context'] and 'uri' in track['context'] and 'type' in track['context'] and track['context']['type'] == 'playlist':
+        playlist_uri = track['context']['uri']
+        result = sp.playlist(playlist_uri)
+        if 'name' in result:
+            playlist_name = result['name']
     return item['name'], item['uri'], playlist_name, playlist_uri
 
 
@@ -57,7 +63,7 @@ def download_now_playing_image_if_needed(url):
     last_downloaded_image_url = url
 
     # generally only happens 2-5 min
-    sp.auth()
+    auth()
 
 
 def prepare_to_send_image(destination):
@@ -141,22 +147,15 @@ def add_now_playing_to_playlist(now_playing_uri, playlist_uri):
     else:
         return 'Error', 500
 
-
-def _fetch_cache_playlists():
-    global memory_playlists_cache
-    logger.info('_fetch_cache_playlists: called')
-    try:
-        with open(config.SPOTIFY_PLAYLISTS_CACHE_PATH) as data:
-            cache = json.load(data)
-            memory_playlists_cache = cache_dict
-            return cache
-    except:
-        return None
-
-
-def _cache_playlists(cache_dict):
-    global memory_playlists_cache
-    logger.info('_fetch_cache_playlists: called')
-    memory_playlists_cache = cache_dict
-    with open(config.SPOTIFY_PLAYLISTS_CACHE_PATH, 'w', encoding='utf-8') as data:
-        json.dump(cache_dict, data)
+def play_track(track, artist):
+    global sp
+    logger.info('play_track: called')
+    result = sp.search(q="artist:{} track:{}".format(artist, track), type="track", limit=1)
+    if 'tracks' in result:
+        logger.info('got tracks result')
+        item = result['tracks']['items'][0]['uri']
+        sp.start_playback(uris=[item])
+        return 'Done', 200
+    else:
+        logger.info('no tracks result')
+        return 'Error', 500

@@ -5,6 +5,7 @@ from dateutil import tz
 import components.spotify as spotify
 import components.calendar as calendar
 import components.google as google
+import components.lastfm as lastfm
 import components.logging as logging
 
 from configuration import config
@@ -24,7 +25,7 @@ def build_header_now_playing_column_inner_html():
 
     tn, turi, pn, puri = spotify.now_playing_info()
     if tn == None:
-        tn = 'Not Playing'
+        tn = '-'
     if pn == None:
         pn = '-'
     return template.format(track_uri= turi, playlist_uri=puri, playlist_name=pn, track_name=tn, destination=random.randint(1, 100_000_000))
@@ -79,6 +80,39 @@ def build_homework_component():
             events_week.append(event)
 
     return _build_calendar_component('UPCOMING ASSIGNMENTS', events_week, 'static', 'single-date-day')
+
+def build_lastfm_component():
+    template = '''
+     <div class="component-container">
+        <div class="component-container-title">{name}</div>
+        <div class="component-container-tableview">
+            {inner_html}
+        </div>
+    </div>
+    '''
+    
+    track_template = '''
+    <div id="{id}" class="component-container-tableview-row cursor-element" data-name="{data_name}" data-artist="{data_artist}" onClick="lastfmRowClicked(this.id)">
+        <div class="component-container-tableview-row-title">
+            {name}
+        </div>
+        <div class="component-container-tableview-row-detail container-row-detail-grey-blue">
+            {count}
+        </div>
+    </div>
+
+    '''
+
+    tracks = lastfm.fetch_tracks()
+    if len(tracks) == 0:
+        return None
+
+    inner_html = ''
+    for track in tracks:
+        id = random.randint(1, 100_000_000)
+        inner_html += track_template.format(id=id, name=track['name'], count=track['count'], data_name=track['name'], data_artist=track['artist'])
+    return template.format(name='TOP TRACKS THIS WEEK', inner_html=inner_html)
+
 
 def _build_calendar_component(name, events, data_type, date_format):
     template = '''

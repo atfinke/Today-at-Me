@@ -9,6 +9,7 @@ import components.spotify as spotify
 import components.calendar as calendar
 import components.google as google
 import components.monitor as monitor
+import components.lastfm as lastfm
 import components.builders as builders
 
 import background.displays as displays
@@ -36,6 +37,7 @@ def today():
     office_hours_component_html=builders.build_office_hours_component(),
     life_nu_component_html=builders.build_life_nu_component(),
     l4a_component_html=builders.build_l4a_component(),
+    lastfm_component_html=builders.build_lastfm_component(),
     homework_component_html=builders.build_homework_component(),
     theatre_component_html=builders.build_theatre_component(),
     monitor_component_html=builders.build_monitor_component(),
@@ -74,6 +76,12 @@ def spotify_remove_track():
     now_playing_playlist_uri = request.args.get('now_playing_playlist_uri')
     return spotify.remove_now_playing_from_current_playlist(now_playing_track_uri, now_playing_playlist_uri)
 
+@app.route("/spotify/play_track", methods=["POST"])
+def spotify_play_track():
+    track_name = request.args.get('track_name')
+    artist = request.args.get('artist')
+    return spotify.play_track(track_name, artist)
+
 def _configure_for_connected_display():
     displays.configure_for_connected_display()
     # threading.Timer(5.0, _configure_for_connected_display).start()
@@ -82,12 +90,11 @@ def _prep_caches():
     spotify.all_playlists()
     google.fetch_homework()
     calendar.fetch_events()
-    # threading.Timer(60.0, _prep_caches).start()
-
+    lastfm.fetch_tracks()
+    # threading.Timer(120.0, _prep_caches).start()
 
 spotify.auth()
 google.auth()
-
 _prep_caches()
 
 if __name__ == '__main__':

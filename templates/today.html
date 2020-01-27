@@ -69,6 +69,11 @@
             {{ theatre_component_html|safe }}
             {% else %}
             {% endif %}
+
+            {% if lastfm_component_html %}
+            {{ lastfm_component_html|safe }}
+            {% else %}
+            {% endif %}
         </div>
 
         <div class="component-column">

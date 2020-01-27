@@ -191,3 +191,7 @@ body {
 	opacity: 0.9;
 	text-align: center;
 }
+
+.cursor-element {
+	cursor: pointer;
+}

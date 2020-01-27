@@ -1,13 +1,5 @@
 const days = ["Sun", "Mon", "Tues", "Wed", "Thurs", "Fri", "Sat"];
-const fullDays = [
-  "Sunday",
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday"
-];
+
 const months = [
   "January",
   "February",
@@ -120,83 +112,52 @@ function updateContainerRowDetails() {
       continue;
     }
 
-    if (data.type == "countdown") {
-      if (data.dateFormat == "hour-range") {
-        let startDate = dateFromUTC(data.startDate);
-        let startDateTime = startDate.getTime();
-        let endDate = dateFromUTC(data.endDate);
-        let endDateTime = endDate.getTime();
+    let startDate = dateFromUTC(data.startDate);
+    let startDateTime = startDate.getTime();
+    let endDate = dateFromUTC(data.endDate);
+    let endDateTime = endDate.getTime();
+    let daysUntil = daysBetweenDates(startDate, now);
 
-        if (nowTime - endDate > 0) {
-          element.innerHTML = "DONE";
-          updateContainerRowDetailColor(element, "container-row-detail-green");
-        } else if (nowTime - startDate > 0) {
-          let distance = endDateTime - nowTime;
-          const minutes = Math.floor(distance / (1000 * 60));
-          const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-          element.innerHTML =
-            "T-" +
-            paddedStringForNum(minutes) +
-            ":" +
-            paddedStringForNum(seconds);
-          updateContainerRowDetailColor(element, "container-row-detail-blue");
-        } else {
-          let suffix = endDate.getHours() > 12 ? "PM" : "AM";
-          element.innerHTML =
-            "" +
-            formattedHours(startDate.getHours()) +
-            ":" +
-            paddedStringForNum(startDate.getMinutes()) +
-            " - " +
-            formattedHours(endDate.getHours()) +
-            ":" +
-            paddedStringForNum(endDate.getMinutes()) +
-            " " +
-            suffix;
-          updateContainerRowDetailColor(element, "container-row-detail-grey");
-        }
-      }
-    } else if (data.type == "static") {
-      let startDate = dateFromUTC(data.startDate);
-      let startDateTime = startDate.getTime();
-      let daysUntil = daysBetweenDates(startDate, now);
 
-      const includeHour = data.dateFormat == "single-date-day-and-hour";
+    let hours = startDate.getHours();
+    let hourString = formattedHours(hours);
+    let suffix = hours > 12 ? "pm" : "am";
+    let min = startDate.getMinutes();
+    let minString = min == 0 ? "" : ":" + paddedStringForNum(min);
 
-      let hours = startDate.getHours();
-      let hourString = formattedHours(hours);
-      let suffix = hours > 12 ? "pm" : "am";
-      let min = startDate.getMinutes();
-      let minString = min == 0 ? "" : ":" + paddedStringForNum(min);
-      let prefix;
-      if (startDate.getDate() == now.getDate()) {
-        prefix = "Today";
-        updateContainerRowDetailColor(element, "container-row-detail-blue");
-      } else if (daysUntil < 1) {
-        let dayNames = includeHour ? days : fullDays;
-        prefix = dayNames[startDate.getDay()];
-        updateContainerRowDetailColor(
-          element,
-          "container-row-detail-grey-blue"
-        );
-      } else if (daysUntil < 7) {
-        let dayNames = includeHour ? days : fullDays;
-        prefix = dayNames[startDate.getDay()];
-        updateContainerRowDetailColor(element, "container-row-detail-grey");
-      }
 
-      if (typeof prefix == "undefined") {
-        element.innerHTML =
-          "" + (startDate.getMonth() + 1) + "/" + startDate.getDate();
-        updateContainerRowDetailColor(element, "container-row-detail-grey");
-      } else {
-        if (includeHour) {
-          element.innerHTML = prefix + ", " + hourString + minString + suffix;
-        } else {
-          element.innerHTML = prefix;
-        }
-      }
+
+    if (nowTime - endDate > 0) {
+      element.innerHTML = "DONE";
+      updateContainerRowDetailColor(element, "container-row-detail-green");
+    } else if (nowTime - startDate > 0) {
+      let distance = endDateTime - nowTime;
+      const minutes = Math.floor(distance / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+      element.innerHTML =
+        "T-" +
+        paddedStringForNum(minutes) +
+        ":" +
+        paddedStringForNum(seconds);
+      updateContainerRowDetailColor(element, "container-row-detail-blue");
+    } else if (now.getDate() == startDate.getDate()) {
+      let suffix = startDate.getHours() > 12 ? "PM" : "AM";
+      element.innerHTML =
+        "" +
+        formattedHours(startDate.getHours()) +
+        ":" +
+        paddedStringForNum(startDate.getMinutes()) +
+        " " +
+        suffix;
+      updateContainerRowDetailColor(element, "container-row-detail-grey-blue");
+    } else if (daysUntil < 7) {
+      element.innerHTML = days[startDate.getDay()];
+      updateContainerRowDetailColor(element, "container-row-detail-grey");
+    } else {
+      element.innerHTML = "" + (startDate.getMonth() + 1) + "/" + startDate.getDate();
+      updateContainerRowDetailColor(element, "container-row-detail-grey");
     }
+
   }
 }
 
@@ -264,6 +225,33 @@ function updateWeather() {
   }
 }
 
+function lastfmRowClicked(element_id) {
+  element = document.getElementById(element_id);
+  let metadata = element.dataset;
+  let song = metadata.name;
+  let artist = metadata.artist;
+  let xhr = new XMLHttpRequest();
+  xhr.open(
+    "POST",
+    "/spotify/play_track?track_name=" +
+    song +
+    "&artist=" +
+    artist,
+    true
+  );
+  xhr.onreadystatechange = function () {
+    if (this.readyState != 4) return;
+    console.log(this.status);
+    console.log(this.response);
+    
+    if (this.status == 200) {
+
+    } else {
+    }
+  };
+  xhr.send();
+}
+
 function spotifyPlaylistSelectionChanged() {
   document.getElementById("spotify-playlist-selection-button").innerHTML =
     "ADD";
@@ -281,8 +269,6 @@ function spotifyPlaylistAddButtonClicked() {
     playlistURISelection.options[playlistURISelection.selectedIndex];
   let nowPlayingTrackURI = document.getElementById("now-playing-metadata")
     .dataset.trackUri;
-
-  console.log(selectedPlaylist);
 
   let xhr = new XMLHttpRequest();
   xhr.open(
@@ -365,7 +351,7 @@ function spotifyGetNowPlaying() {
       imageElement.style.visibility = "visible";
       imageContainer.style.backgroundColor = "red";
     } else {
-      songElement.innerHTML = "Not Playing";
+      songElement.innerHTML = "-";
       playlistElement.innerHTML = "-";
 
       metadata.dataset.trackUri = "";
@@ -419,7 +405,7 @@ function getMonitorUpdate() {
     }
   };
   xhr.send();
-  setTimeout(function() { getMonitorUpdate(); }, 2000 + (Math.random() * 2500));
+  setTimeout(function() { getMonitorUpdate(); }, 2000 + (Math.random() * 5000));
 }
 
 function windowResized() {
@@ -463,9 +449,10 @@ function start() {
   setInterval(updateTodayDate, 1000);
 
   updateWeather();
+  setInterval(updateWeather, 1000 * 60 * 30);
 
   spotifyGetNowPlaying();
-  setInterval(spotifyGetNowPlaying, 1000);
+  setInterval(spotifyGetNowPlaying, 2000);
 
   getMonitorUpdate();
 
