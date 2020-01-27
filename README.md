@@ -14,7 +14,8 @@ My local homepage + background processing server. This is inspired by years of s
 | https://github.com/atfinke/LastfmProfileStats  | Listening Stats  |
 | https://github.com/atfinke/PlaylistCurator  | Add/Remove From Current Playlist  |
 | https://github.com/atfinke/Spotify-Add-to-Playlist  | Add To Any Playlist  |
-| https://github.com/atfinke/time  | Time app  |
+| https://github.com/atfinke/time  | Time App  |
+| https://github.com/atfinke/DisneyMLv2 | Wait Times |
 
 ### Functions
 #### Serve my local homepage
