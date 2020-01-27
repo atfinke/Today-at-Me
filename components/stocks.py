@@ -42,7 +42,12 @@ def fetch_stocks():
 def _nasdaq_stock_percent_change(symbol):
     endpoint = 'https://api.nasdaq.com/api/quote/' + symbol + '/info?assetclass=stocks'
     with urllib.request.urlopen(endpoint) as url:
-        data = json.loads(url.read().decode())['data']['primaryData']
+        data = json.loads(url.read().decode())['data']
+        
+        if 'secondaryData' in data:
+            data = data['secondaryData']
+        else:
+            data = data['primaryData']
         sign = '-' if data['deltaIndicator'] == 'down' else '+'
         return sign + data['percentageChange'].strip().replace(' ', '')
     return None

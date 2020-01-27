@@ -175,7 +175,7 @@ def build_theme_park_component():
         return None
 
     inner_html = ''
-    for ride in rides[:5]:
+    for ride in rides[:8]:
         color = 'red' if ride['waitTime'] > 120 else 'grey'
         inner_html += ride_template.format(name=ride['name'], time=ride['waitTime'], color=color)
     return template.format(name='WAIT TIMES', inner_html=inner_html)

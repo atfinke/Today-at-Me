@@ -39,12 +39,14 @@ def auth():
             logger.info('auth: starting flow')
             flow = InstalledAppFlow.from_client_secrets_file(
                 config.GOOGLE_CREDIENTALS_PATH, SCOPES)
-            creds = flow.run_local_server()
+            creds = flow.run_console()
         with open(config.GOOGLE_AUTH_PATH, 'wb') as token:
             pickle.dump(creds, token)
 
 
 def fetch_homework():
+    auth()
+
     global creds, memory_cache
     logger.info('fetch_homework: called')
 
@@ -58,7 +60,6 @@ def fetch_homework():
     content = cache.content(existing_cache, config.GOOGLE_CACHE_LIFETIME)
     if content:
         return content
-
 
     service = build('drive', 'v3', credentials=creds)
     request = service.files().export_media(fileId=config.GOOGLE_HOMEWORK_DOC_ID, mimeType='text/html')
