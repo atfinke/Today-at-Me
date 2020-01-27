@@ -60,6 +60,11 @@
 
         <div class="component-column">
             
+            {% if stocks_component_html %}
+            {{ stocks_component_html|safe }}
+            {% else %}
+            {% endif %}
+            
             {% if homework_component_html %}
             {{ homework_component_html|safe }}
             {% else %}

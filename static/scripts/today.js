@@ -434,6 +434,35 @@ function windowResized() {
   }
 }
 
+function updateStocks() {
+  let xhr = new XMLHttpRequest();
+  xhr.open("GET", "/stocks/now", true);
+  xhr.onreadystatechange = function() {
+    if (this.readyState != 4) return;
+
+    let response = JSON.parse(this.responseText);
+    let responseDict = {}
+    for (let item of response) {
+      responseDict[item['name']] = item['percent']
+    }
+    if (this.status == 200) {
+      let elements = document.getElementsByClassName('stock-detail')
+      for (let element of elements) {
+        let symbol = element.dataset.symbol
+        let percent = responseDict[symbol]
+        element.innerHTML = percent
+        if (percent[0] == '-') {
+          updateContainerRowDetailColor(element, "container-row-detail-red");
+        } else {
+          updateContainerRowDetailColor(element, "container-row-detail-green");
+        }
+      }
+    }
+  };
+  xhr.send();
+  setTimeout(function() { updateStocks(); }, 4000 + (Math.random() * 5000));
+}
+
 function start() {
   configureNameAnimations();
 
@@ -455,6 +484,7 @@ function start() {
   setInterval(spotifyGetNowPlaying, 2000);
 
   getMonitorUpdate();
+  updateStocks();
 
   windowResized();
   window.onresize = windowResized;

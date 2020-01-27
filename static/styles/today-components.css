@@ -195,3 +195,7 @@ body {
 .cursor-element {
 	cursor: pointer;
 }
+
+.stock-detail {
+	font-weight: 350;
+}

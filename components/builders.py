@@ -7,6 +7,7 @@ import components.calendar as calendar
 import components.google as google
 import components.lastfm as lastfm
 import components.theme_parks as theme_parks
+import components.stocks as stocks
 import components.logging as logging
 
 from configuration import config
@@ -113,6 +114,37 @@ def build_lastfm_component():
         id = random.randint(1, 100_000_000)
         inner_html += track_template.format(id=id, name=track['name'], count=track['count'], data_name=track['name'], data_artist=track['artist'])
     return template.format(name='TOP TRACKS LAST WEEK', inner_html=inner_html)
+
+def build_stocks_component():
+    template = '''
+     <div class="component-container">
+        <div class="component-container-tableview">
+            {inner_html}
+        </div>
+    </div>
+    '''
+    
+    stock_template = '''
+    <div class="component-container-tableview-row">
+        <div class="component-container-tableview-row-title">
+            {symbol}
+        </div>
+        <div class="component-container-tableview-row-detail container-row-detail-{color} stock-detail" data-symbol="{symbol}">
+            {percent}
+        </div>
+    </div>
+
+    '''
+
+    fetched_stocks = stocks.fetch_stocks()
+    if len(fetched_stocks) == 0:
+        return None
+
+    inner_html = ''
+    for stock in fetched_stocks:
+        color = 'red' if stock['percent'][0] == '-' else 'green'
+        inner_html += stock_template.format(symbol=stock['name'], percent=stock['percent'], color=color)
+    return template.format(inner_html=inner_html)
 
 def build_theme_park_component():
     template = '''

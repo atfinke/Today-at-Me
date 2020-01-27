@@ -11,6 +11,7 @@ import components.monitor as monitor
 import components.lastfm as lastfm
 import components.builders as builders
 import components.theme_parks as theme_parks
+import components.stocks as stocks
 
 import background.displays as displays
 
@@ -40,12 +41,17 @@ def today():
     homework_component_html=builders.build_homework_component(),
     theatre_component_html=builders.build_theatre_component(),
     theme_park_component_html=builders.build_theme_park_component(),
+    stocks_component_html=builders.build_stocks_component(),
     monitor_component_html=builders.build_monitor_component(),
     weather_inner_html=builders.build_weather_component_inner_html())
 
 @app.route("/monitor/now", methods=["GET"])
 def monitor_now():
     return jsonify(monitor.fetch_stats()), 200
+
+@app.route("/stocks/now", methods=["GET"])
+def stocks_now():
+    return jsonify(stocks.fetch_stocks()), 200
 
 @app.route("/spotify/now_playing", methods=["GET"])
 def spotify_now_playing():
