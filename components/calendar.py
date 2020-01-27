@@ -29,7 +29,6 @@ def fetch_events():
     if content:
         return content
 
-
     store = CalCalendarStore.defaultCalendarStore()
     cals = []
     for cal in store.calendars():
@@ -67,3 +66,7 @@ def fetch_events():
     memory_cache = cache_dict
 
     return formatted_results
+
+def invalidate_memory_cache():
+    global memory_cache
+    memory_cache = None

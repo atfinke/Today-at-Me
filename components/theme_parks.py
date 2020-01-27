@@ -41,3 +41,7 @@ def fetch_wait_times():
     cache.save(cache_dict, config.THEME_PARKS_CACHE_PATH)
     memory_cache = cache_dict
     return rides
+
+def invalidate_memory_cache():
+    global memory_cache
+    memory_cache = None

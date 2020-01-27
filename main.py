@@ -1,4 +1,5 @@
 import requests
+import os
 import threading
 from flask import Flask, render_template, request, jsonify, send_file
 from werkzeug.serving import WSGIRequestHandler
@@ -44,6 +45,23 @@ def today():
     stocks_component_html=builders.build_stocks_component(),
     monitor_component_html=builders.build_monitor_component(),
     weather_inner_html=builders.build_weather_component_inner_html())
+
+@app.route("/clear_cache", methods=["POST"])
+def clear_cache():
+    os.remove(config.CALENDAR_CACHE_PATH)
+    os.remove(config.GOOGLE_CACHE_PATH)
+    os.remove(config.LASTFM_CACHE_PATH)
+    os.remove(config.SPOTIFY_PLAYLISTS_CACHE_PATH)
+    os.remove(config.THEME_PARKS_CACHE_PATH)
+    
+
+    calendar.invalidate_memory_cache()
+    google.invalidate_memory_cache()
+    lastfm.invalidate_memory_cache()
+    spotify.invalidate_memory_cache()
+    theme_parks.invalidate_memory_cache()
+    monitor.invalidate_memory_cache()
+    return 'DONE', 200
 
 @app.route("/monitor/now", methods=["GET"])
 def monitor_now():

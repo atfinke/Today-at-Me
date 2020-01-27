@@ -38,3 +38,7 @@ def fetch_tracks():
     memory_cache = cache_dict
 
     return formatted_tracks
+
+def invalidate_memory_cache():
+    global memory_cache
+    memory_cache = None

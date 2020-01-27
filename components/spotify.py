@@ -156,3 +156,7 @@ def play_track(track, artist):
     else:
         logger.info('no tracks result')
         return 'Error', 500
+
+def invalidate_memory_cache():
+    global memory_playlists_cache
+    memory_playlists_cache = None

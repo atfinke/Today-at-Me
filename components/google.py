@@ -105,3 +105,7 @@ def fetch_homework():
     memory_cache = cache_dict
 
     return formatted_assignments
+
+def invalidate_memory_cache():
+    global memory_cache
+    memory_cache = None

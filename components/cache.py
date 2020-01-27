@@ -7,6 +7,7 @@ def content(cache_dict, lifetime):
     if cache_dict:
         date = cache_dict[config.CACHE_DATE_KEY]
         if datetime.now().timestamp() < date + lifetime:
+            mem_cache = cache_dict
             return cache_dict[config.CACHE_CONTENT_KEY]
         else:
             return None

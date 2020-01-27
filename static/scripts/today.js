@@ -463,6 +463,22 @@ function updateStocks() {
   setTimeout(function() { updateStocks(); }, 4000 + (Math.random() * 5000));
 }
 
+function clearCache() {
+  let xhr = new XMLHttpRequest();
+  xhr.open(
+    "POST",
+    "/clear_cache",
+    true
+  );
+  xhr.onreadystatechange = function() {
+    if (this.readyState != 4) return;
+    if (this.status == 200) {
+      document.location.reload(true);
+    }
+  };
+  xhr.send();
+}
+
 function start() {
   configureNameAnimations();
 
