@@ -1,6 +1,7 @@
 from configuration import secrets
 
 CACHE_DATE_KEY = 'date'
+CACHE_CONTENT_KEY = 'content'
 
 TODAY_DATA_PATH = './user-data'
 LOGGING_DATA_PATH = TODAY_DATA_PATH + '/logging'
@@ -11,14 +12,12 @@ DISPLAYS_LOGGING_PATH = LOGGING_DATA_PATH + '/displays.log'
 CALENDAR_CACHE_PATH = CACHE_DATA_PATH + '/calendar.json'
 CALENDAR_CACHE_LIFETIME = 120
 CALENDAR_LOGGING_PATH = LOGGING_DATA_PATH + '/calendar.log'
-CALENDAR_CALENDARS_KEY = 'calendars'
 CALENDAR_EVENTS_KEY = 'events'
 CALENDAR_EVENT_NAME_KEY = 'name'
 CALENDAR_EVENT_START_DATE_KEY = 'start'
 CALENDAR_EVENT_END_DATE_KEY = 'end'
 CALENDAR_CALENDARS = ['Life', 'NU', 'NU Classes', 'L4A', 'NU OH', 'A.Theatre', 'andrewfinke2021@u.northwestern.edu']
 
-GOOGLE_ASSIGNMENTS_KEY = 'assignments'
 GOOGLE_CACHE_PATH = CACHE_DATA_PATH + '/homework.json'
 GOOGLE_CACHE_LIFETIME = 120
 GOOGLE_AUTH_PATH = CACHE_DATA_PATH + '/google_auth'
@@ -48,7 +47,6 @@ SPOTIFY_REDIRECT_URI = 'http://localhost:5000/callback/'
 SPOTIFY_LOGGING_PATH = LOGGING_DATA_PATH + '/spotify.log'
 SPOTIFY_IMAGE_PATH = CACHE_DATA_PATH + '/spotify.jpeg'
 SPOTIFY_PLAYLISTS_CACHE_PATH = CACHE_DATA_PATH + '/spotify_playlists.json'
-SPOTIFY_PLAYLISTS_KEY = 'playlists'
 SPOTIFY_PLAYLISTS_CACHE_LIFETIME = 60
 SPOTIFY_AUTH_CACHE_PATH = CACHE_DATA_PATH + '/spotify_auth'
 

@@ -7,7 +7,7 @@ from dateutil import tz
 from CalendarStore import CalCalendarStore, CalEvent, CalTask
 from Cocoa import NSDate
 
-from components import logging
+from components import cache, logging
 from configuration import config
 
 logger = logging.setup_logger(
@@ -16,7 +16,6 @@ memory_cache = None
 
 def fetch_events():
     global memory_cache
-
     logger.info('fetch_events: called')
 
     existing_cache = memory_cache
@@ -24,15 +23,11 @@ def fetch_events():
         logger.info('fetch_events: checking memory cache')
     else:
         logger.info('fetch_events: checking disk cache')
-        existing_cache = _fetch_cache_events()
+        existing_cache = cache.fetch(config.CALENDAR_CACHE_PATH)
 
-    if existing_cache:
-        date = existing_cache[config.CACHE_DATE_KEY]
-        if datetime.now().timestamp() < date + config.CALENDAR_CACHE_LIFETIME:
-            logger.info('fetch_events: using cache')
-            return existing_cache[config.CALENDAR_CALENDARS_KEY]
-        else:
-            logger.info('fetch_events: cache too old {}'.format(datetime.now().timestamp() - date))
+    content = cache.content(existing_cache, config.CALENDAR_CACHE_LIFETIME)
+    if content:
+        return content
 
 
     store = CalCalendarStore.defaultCalendarStore()
@@ -65,27 +60,10 @@ def fetch_events():
 
     cache_dict = {
         config.CACHE_DATE_KEY: datetime.now().timestamp(),
-        config.CALENDAR_CALENDARS_KEY: formatted_results
+        config.CACHE_CONTENT_KEY: formatted_results
     }
-    _cache_events(cache_dict)
-    return formatted_results
 
-
-def _fetch_cache_events():
-    global memory_cache
-    logger.info('_fetch_cache_events: called')
-    try:
-        with open(config.CALENDAR_CACHE_PATH) as data:
-            cache = json.load(data)
-            memory_cache = cache
-            return cache
-    except:
-        return None
-
-
-def _cache_events(cache_dict):
-    global memory_cache
-    logger.info('_cache_events: called')
+    cache.save(cache_dict, config.CALENDAR_CACHE_PATH)
     memory_cache = cache_dict
-    with open(config.CALENDAR_CACHE_PATH, 'w', encoding='utf-8') as data:
-        json.dump(cache_dict, data)
+
+    return formatted_results

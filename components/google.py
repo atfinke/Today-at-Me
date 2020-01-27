@@ -10,7 +10,7 @@ from google.auth.transport.requests import Request
 from googleapiclient.http import MediaIoBaseDownload
 from html2text import html2text
 
-from components import logging
+from components import cache, logging
 from configuration import config
 
 SCOPES = [
@@ -53,15 +53,11 @@ def fetch_homework():
         logger.info('fetch_homework: checking memory cache')
     else:
         logger.info('fetch_homework: checking disk cache')
-        existing_cache = _fetch_cache_classes()
+        existing_cache = cache.fetch(config.GOOGLE_CACHE_PATH)
 
-    if existing_cache:
-        date = existing_cache[config.CACHE_DATE_KEY]
-        if datetime.now().timestamp() < date + config.GOOGLE_CACHE_LIFETIME:
-            logger.info('fetch_homework: using cache')
-            return existing_cache[config.GOOGLE_ASSIGNMENTS_KEY]
-        else:
-            logger.info('fetch_homework: cache too old {}'.format(datetime.now().timestamp() - date))
+    content = cache.content(existing_cache, config.GOOGLE_CACHE_LIFETIME)
+    if content:
+        return content
 
 
     service = build('drive', 'v3', credentials=creds)
@@ -102,27 +98,9 @@ def fetch_homework():
 
     cache_dict = {
         config.CACHE_DATE_KEY: datetime.now().timestamp(),
-        config.GOOGLE_ASSIGNMENTS_KEY: formatted_assignments
+        config.CACHE_CONTENT_KEY: formatted_assignments
     }
-    _cache_classes(cache_dict)
-    return formatted_assignments
-
-
-def _fetch_cache_classes():
-    global memory_cache
-    logger.info('_fetch_cache_classes: called')
-    try:
-        with open(config.GOOGLE_CACHE_PATH) as data:
-            cache = json.load(data)
-            memory_cache = cache
-            return cache
-    except:
-        return None
-
-
-def _cache_classes(cache_dict):
-    global memory_cache
-    logger.info('_cache_classes: called')
+    cache.save(cache_dict, config.GOOGLE_CACHE_PATH)
     memory_cache = cache_dict
-    with open(config.GOOGLE_CACHE_PATH, 'w', encoding='utf-8') as data:
-        json.dump(cache_dict, data)
+
+    return formatted_assignments

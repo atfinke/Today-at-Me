@@ -6,7 +6,7 @@ import spotipy
 import spotipy.util as util
 from spotipy.oauth2 import SpotifyClientCredentials
 
-from components import logging
+from components import cache, logging
 from configuration import config
 
 logger = logging.setup_logger('spotify', config.SPOTIFY_LOGGING_PATH)
@@ -78,15 +78,11 @@ def all_playlists():
         logger.info('all_playlists: checking memory cache')
     else:
         logger.info('all_playlists: checking disk cache')
-        existing_cache = _fetch_cache_playlists()
+        existing_cache = cache.fetch(config.SPOTIFY_PLAYLISTS_CACHE_PATH)
 
-    if existing_cache:
-        date = existing_cache[config.CACHE_DATE_KEY]
-        if datetime.now().timestamp() < date + config.SPOTIFY_PLAYLISTS_CACHE_LIFETIME:
-            logger.info('all_playlists: using cache')
-            return existing_cache[config.SPOTIFY_PLAYLISTS_KEY]
-        else:
-            logger.info('all_playlists: cache too old {}'.format(datetime.now().timestamp() - date))
+    content = cache.content(existing_cache, config.SPOTIFY_PLAYLISTS_CACHE_LIFETIME)
+    if content:
+        return content
 
     formatted_playlists = []
     playlists = sp.user_playlists(config.SPOTIFY_USERNAME)
@@ -100,9 +96,11 @@ def all_playlists():
 
     cache_dict = {
         config.CACHE_DATE_KEY: datetime.now().timestamp(),
-        config.SPOTIFY_PLAYLISTS_KEY: formatted_playlists
+        config.CACHE_CONTENT_KEY: formatted_playlists
     }
-    _cache_playlists(cache_dict)
+    cache.save(cache_dict, config.SPOTIFY_PLAYLISTS_CACHE_PATH)
+    memory_playlists_cache = cache_dict
+
     return formatted_playlists
 
 
