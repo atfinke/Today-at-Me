@@ -199,12 +199,3 @@ body {
 .stock-detail {
 	font-weight: 350;
 }
-
-#clear-cache-button {
-	color: rgb(180, 180, 180, 0.25);
-	margin: var(--column-margin);
-	margin-bottom: 10px;
-	font-weight: 600;
-	font-size: 10px;
-	cursor: pointer;
-}

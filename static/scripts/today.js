@@ -136,7 +136,7 @@ function updateContainerRowDetails() {
       const seconds = Math.floor((distance % (1000 * 60)) / 1000);
       element.innerHTML =
         "T-" +
-        paddedStringForNum(minutes) +
+        minutes +
         ":" +
         paddedStringForNum(seconds);
       updateContainerRowDetailColor(element, "container-row-detail-blue");
