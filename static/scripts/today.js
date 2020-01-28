@@ -49,7 +49,11 @@ function dateFromUTC(utc) {
 }
 
 function formattedHours(hours) {
-  return "" + (hours > 12 ? hours % 12 : hours);
+  if (hours == 0) {
+    return '12'
+  } else {
+    return "" + (hours > 12 ? hours % 12 : hours);
+  }
 }
 
 function configureNameAnimations() {
@@ -121,7 +125,7 @@ function updateContainerRowDetails() {
 
     let hours = startDate.getHours();
     let hourString = formattedHours(hours);
-    let suffix = hours > 12 ? "pm" : "am";
+    let suffix = hours >= 12 ? "pm" : "am";
     let min = startDate.getMinutes();
     let minString = min == 0 ? "" : ":" + paddedStringForNum(min);
 
@@ -141,14 +145,13 @@ function updateContainerRowDetails() {
         paddedStringForNum(seconds);
       updateContainerRowDetailColor(element, "container-row-detail-blue");
     } else if (now.getDate() == startDate.getDate()) {
-      let suffix = startDate.getHours() > 12 ? "PM" : "AM";
       element.innerHTML =
         "" +
         formattedHours(startDate.getHours()) +
         ":" +
         paddedStringForNum(startDate.getMinutes()) +
         " " +
-        suffix;
+        suffix.toUpperCase();
       updateContainerRowDetailColor(element, "container-row-detail-grey-blue");
     } else if (daysUntil < 7) {
       element.innerHTML = days[startDate.getDay()];
