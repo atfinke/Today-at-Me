@@ -104,7 +104,10 @@ def spotify_play_track():
 
 def _configure_for_connected_display():
     displays.configure_for_connected_display()
-    threading.Timer(5.0, _configure_for_connected_display).start()
+
+    display_thread = threading.Timer(config.CHECK_DISPLAY_INTERVAL, _configure_for_connected_display)
+    display_thread.daemon = True
+    display_thread.start()
 
 def _prep_caches():
     spotify.fetch_playlists(request_from_server=True)
