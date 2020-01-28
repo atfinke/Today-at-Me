@@ -171,13 +171,13 @@ def build_theme_park_component():
     '''
 
     rides = theme_parks.fetch_wait_times()
-    rides = sorted(rides, key = lambda i: int(i['waitTime']), reverse=True) 
+    rides = sorted(rides, key = lambda i: int(i['waitTime']), reverse=True)[:config.THEME_PARKS_MAX_RIDES] 
 
-    if len(rides) == 0 or int(rides[0]['waitTime']) == 0:
+    if len(rides) == 0 or int(rides[-1]['waitTime']) == 0:
         return None
 
     inner_html = ''
-    for ride in rides[:8]:
+    for ride in rides:
         color = 'red' if ride['waitTime'] > 120 else 'grey'
         inner_html += ride_template.format(name=ride['name'], time=ride['waitTime'], color=color)
     return template.format(name='WAIT TIMES', inner_html=inner_html)
