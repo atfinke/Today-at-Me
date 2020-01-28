@@ -350,7 +350,7 @@ function spotifyGetNowPlaying() {
       metadata.dataset.trackUri = response["turi"];
       metadata.dataset.playlistUri = response["puri"];
 
-      imageElement.src = "/spotify/now_playing.jpeg?destination=" + imageElement.dataset.destination;
+      imageElement.src = "/spotify/now_playing.jpeg?destination=" + imageElement.dataset.destination + '&uri=' + response["turi"];
       imageElement.style.visibility = "visible";
       imageContainer.style.backgroundColor = "red";
     } else {
@@ -360,7 +360,6 @@ function spotifyGetNowPlaying() {
       metadata.dataset.trackUri = "";
       metadata.dataset.playlistUri = "";
 
-      imageElement.src = "/spotify/now_playing.jpeg";
       imageElement.style.visibility = "hidden";
       imageContainer.style.backgroundColor = "rgb(32, 32, 32)";
     }

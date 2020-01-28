@@ -21,14 +21,6 @@ from configuration import config
 WSGIRequestHandler.protocol_version = "HTTP/1.1"
 app = Flask(__name__)
 
-@app.after_request
-def add_header(r):
-    r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-    r.headers["Pragma"] = "no-cache"
-    r.headers["Expires"] = "0"
-    r.headers['Cache-Control'] = 'public, max-age=0'
-    return r
-
 @app.route('/')
 def today():
     return render_template('today.html', 
