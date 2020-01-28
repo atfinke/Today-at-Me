@@ -107,16 +107,19 @@ def _configure_for_connected_display():
     threading.Timer(5.0, _configure_for_connected_display).start()
 
 def _prep_caches():
-    spotify.all_playlists()
-    google.fetch_homework()
-    calendar.fetch_events()
-    lastfm.fetch_tracks()
-    theme_parks.fetch_wait_times()
-    threading.Timer(120.0, _prep_caches).start()
+    spotify.fetch_playlists(request_from_server=True)
+    google.fetch_homework(request_from_server=True)
+    calendar.fetch_events(request_from_server=True)
+    lastfm.fetch_tracks(request_from_server=True)
+    theme_parks.fetch_wait_times(request_from_server=True)
+
+    cache_thread = threading.Timer(config.CHECK_CACHE_INTERVAL, _prep_caches)
+    cache_thread.daemon = True
+    cache_thread.start()
 
 _prep_caches()
 _configure_for_connected_display()
 
 if __name__ == '__main__':
     app.run(host='127.0.0.1', port=8080, debug=False)
-    print(123)
+    print('DONE')

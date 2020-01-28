@@ -483,28 +483,27 @@ function clearCache() {
 }
 
 function start() {
-  configureNameAnimations();
+  windowResized();
+  getMonitorUpdate();
+  updateStocks();
+  
+  updateWeather();
+  setInterval(updateWeather, 1000 * 60 * 30);
+  
+  updateContainerRowDetails();
+  setInterval(updateContainerRowDetails, 1000);
+
+  spotifyGetNowPlaying();
+  setInterval(spotifyGetNowPlaying, 5000);
 
   let countdownID = "XYZ";
   let endDate = new Date("Nov 2, 2020 10:00").getTime();
   updateCountdownComponent(countdownID, endDate);
   setInterval(updateCountdownComponent.bind(null, countdownID, endDate), 1000);
-
-  updateContainerRowDetails();
-  setInterval(updateContainerRowDetails, 1000);
-
+  
+  configureNameAnimations();
   updateTodayDate();
   setInterval(updateTodayDate, 1000);
-
-  updateWeather();
-  setInterval(updateWeather, 1000 * 60 * 30);
-
-  spotifyGetNowPlaying();
-  setInterval(spotifyGetNowPlaying, 5000);
-
-  getMonitorUpdate();
-  updateStocks();
-
-  windowResized();
+  
   window.onresize = windowResized;
 }

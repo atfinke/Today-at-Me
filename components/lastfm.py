@@ -8,7 +8,7 @@ logger = logging.setup_logger(
     'lastfm', config.LASTFM_LOGGING_PATH)
 memory_cache = None
 
-def fetch_tracks():
+def fetch_tracks(request_from_server=False):
     global memory_cache
     logger.info('fetch_tracks: called')
 
@@ -18,7 +18,7 @@ def fetch_tracks():
         logger.info('fetch_tracks: checking disk cache')
         memory_cache = cache.fetch(config.LASTFM_CACHE_PATH)
 
-    content = cache.content(memory_cache, config.LASTFM_CACHE_LIFETIME)
+    content = cache.content(memory_cache, config.LASTFM_CACHE_LIFETIME, request_from_server)
     if content:
         return content
 

@@ -19,7 +19,7 @@ def fetch_stats():
     if memory_cache:
         logger.info('fetch_stats: checking memory cache')
 
-    content = cache.content(memory_cache, config.MONITOR_CACHE_LIFETIME)
+    content = cache.content(memory_cache, config.MONITOR_CACHE_LIFETIME, False)
     if content:
         return content
 
@@ -44,7 +44,7 @@ def fetch_battery():
     if battery_cache:
         logger.info('fetch_battery: checking memory cache')
 
-    content = cache.content(battery_cache, config.MONITOR_BATTERY_CACHE_LIFETIME)
+    content = cache.content(battery_cache, config.MONITOR_BATTERY_CACHE_LIFETIME, False)
     if content:
         return content
 

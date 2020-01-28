@@ -15,7 +15,7 @@ def fetch_stocks():
     if memory_cache:
         logger.info('fetch_stocks: checking memory cache')
 
-    content = cache.content(memory_cache, config.STOCKS_CACHE_LIFETIME)
+    content = cache.content(memory_cache, config.STOCKS_CACHE_LIFETIME, False)
     if content:
         return content
 
@@ -54,6 +54,8 @@ def _exchanges():
         data = json.loads(url.read().decode())['data']
         for exchange in data:
             name = exchange['companyName'].replace('Composite', '')
-            exchanges.append({'name': name, 'percent': exchange['percentageChange'].strip().replace(' ', '')})
+            percent = exchange['percentageChange'].strip().replace(' ', '')
+            percent = percent if percent[0] == '-' else ('+' + percent)
+            exchanges.append({'name': name, 'percent': percent})
     exchanges = sorted(exchanges, key = lambda i: i['name'])
     return exchanges

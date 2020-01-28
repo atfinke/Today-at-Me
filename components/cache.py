@@ -3,10 +3,14 @@ import json
 
 from configuration import config
 
-def content(cache_dict, lifetime):
+def content(cache_dict, lifetime, request_from_server):
     if cache_dict:
         date = cache_dict[config.CACHE_DATE_KEY]
-        if datetime.now().timestamp() < date + lifetime:
+
+        now = datetime.now().timestamp()
+        if request_from_server and now > date + (lifetime * config.CACHE_EARLY_SERVER_REFRESH_MULTIPLIER):
+            return None
+        elif now < date + lifetime:
             return cache_dict[config.CACHE_CONTENT_KEY]
         else:
             return None

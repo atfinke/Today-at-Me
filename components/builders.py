@@ -44,7 +44,7 @@ def build_spotify_add_to_playlist_html():
     </div>
     '''
 
-    playlists = spotify.all_playlists()
+    playlists = spotify.fetch_playlists()
     if len(playlists) == 0:
         return None
 
@@ -131,9 +131,7 @@ def build_stocks_component():
         <div class="component-container-tableview-row-title">
             {symbol}
         </div>
-        <div class="component-container-tableview-row-detail container-row-detail-{color} stock-detail" data-symbol="{symbol}">
-            {percent}
-        </div>
+        <div class="component-container-tableview-row-detail stock-detail" data-symbol="{symbol}"></div>
     </div>
 
     '''
@@ -144,8 +142,7 @@ def build_stocks_component():
 
     inner_html = ''
     for stock in fetched_stocks:
-        color = 'red' if stock['percent'][0] == '-' else 'green'
-        inner_html += stock_template.format(symbol=stock['name'], percent=stock['percent'], color=color)
+        inner_html += stock_template.format(symbol=stock['name'])
     return template.format(inner_html=inner_html)
 
 def build_theme_park_component():

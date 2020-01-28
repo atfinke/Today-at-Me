@@ -72,17 +72,19 @@ def prepare_to_send_image(destination):
         return False
 
 
-def all_playlists():
+def fetch_playlists(request_from_server=False):
+    auth()
+    
     global memory_playlists_cache, sp
-    logger.info('all_playlists: called')
+    logger.info('fetch_playlists: called')
 
     if memory_playlists_cache:
-        logger.info('all_playlists: checking memory cache')
+        logger.info('fetch_playlists: checking memory cache')
     else:
-        logger.info('all_playlists: checking disk cache')
+        logger.info('fetch_playlists: checking disk cache')
         memory_playlists_cache = cache.fetch(config.SPOTIFY_PLAYLISTS_CACHE_PATH)
 
-    content = cache.content(memory_playlists_cache, config.SPOTIFY_PLAYLISTS_CACHE_LIFETIME)
+    content = cache.content(memory_playlists_cache, config.SPOTIFY_PLAYLISTS_CACHE_LIFETIME, request_from_server)
     if content:
         return content
 
@@ -93,7 +95,7 @@ def all_playlists():
             formatted_playlists.append(
                 {'name': playlist['name'], 'uri': playlist['uri']})
 
-    logger.info('all_playlists: got {} playlists'.format(
+    logger.info('fetch_playlists: got {} playlists'.format(
         len(formatted_playlists)))
 
     memory_playlists_cache = cache.save(formatted_playlists, config.SPOTIFY_PLAYLISTS_CACHE_PATH)

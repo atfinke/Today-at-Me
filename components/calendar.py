@@ -14,7 +14,7 @@ logger = logging.setup_logger(
     'calendar', config.CALENDAR_LOGGING_PATH)
 memory_cache = None
 
-def fetch_events():
+def fetch_events(request_from_server=False):
     global memory_cache
     logger.info('fetch_events: called')
 
@@ -24,7 +24,7 @@ def fetch_events():
         logger.info('fetch_events: checking disk cache')
         memory_cache = cache.fetch(config.CALENDAR_CACHE_PATH)
 
-    content = cache.content(memory_cache, config.CALENDAR_CACHE_LIFETIME)
+    content = cache.content(memory_cache, config.CALENDAR_CACHE_LIFETIME, request_from_server)
     if content:
         return content
 

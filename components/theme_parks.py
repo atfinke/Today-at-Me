@@ -8,7 +8,7 @@ logger = logging.setup_logger(
     'theme-park', config.THEME_PARKS_LOGGING_PATH)
 memory_cache = None
 
-def fetch_wait_times():
+def fetch_wait_times(request_from_server=False):
     global memory_cache
     logger.info('fetch_wait_times: called')
 
@@ -18,7 +18,7 @@ def fetch_wait_times():
         logger.info('fetch_wait_times: checking disk cache')
         memory_cache = cache.fetch(config.THEME_PARKS_CACHE_PATH)
 
-    content = cache.content(memory_cache, config.THEME_PARKS_CACHE_LIFETIME)
+    content = cache.content(memory_cache, config.THEME_PARKS_CACHE_LIFETIME, request_from_server)
     if content:
         return content
 

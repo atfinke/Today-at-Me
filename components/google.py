@@ -47,7 +47,7 @@ def auth():
             pickle.dump(creds, token)
 
 
-def fetch_homework():
+def fetch_homework(request_from_server=False):
     auth()
 
     global creds, memory_cache
@@ -59,7 +59,7 @@ def fetch_homework():
         logger.info('fetch_homework: checking disk cache')
         memory_cache = cache.fetch(config.GOOGLE_CACHE_PATH)
 
-    content = cache.content(memory_cache, config.GOOGLE_CACHE_LIFETIME)
+    content = cache.content(memory_cache, config.GOOGLE_CACHE_LIFETIME, request_from_server)
     if content:
         return content
 
