@@ -87,8 +87,8 @@ def build_homework_component():
 
 def build_lastfm_component():
     template = '''
-     <div class="component-container" onclick="window.open(\'https://www.last.fm/user/andrewfinke/listening-report/week\',\'_self\')"'>
-        <div class="component-container-title">{name}</div>
+     <div class="component-container">
+        <div class="component-container-title cursor-element" onclick="window.open(\'https://www.last.fm/user/andrewfinke/listening-report/week\',\'_self\')">{name}</div>
         <div class="component-container-tableview">
             {inner_html}
         </div>
@@ -119,7 +119,7 @@ def build_lastfm_component():
 
 def build_stocks_component():
     template = '''
-     <div class="component-container">
+     <div class="component-container cursor-element" onclick="window.open(\'https://oltx.fidelity.com/ftgw/fbc/oftop/portfolio#summary',\'_self\')"'>
         <div class="component-container-tableview">
             {inner_html}
         </div>
