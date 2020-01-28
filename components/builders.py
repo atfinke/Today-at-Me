@@ -54,7 +54,7 @@ def build_spotify_add_to_playlist_inner_html():
 
 def build_theatre_component():
     events = calendar.fetch_events()['A.Theatre']
-    return _build_calendar_component('A.THEATRE', events, 'static', 'single-date-day')
+    return _build_calendar_component('A.THEATRE', events, 'static', 'single-date-day', 'https://www.andrewfinke.com/theatre')
 
 def build_life_nu_component():
     events = calendar.fetch_events()
@@ -68,7 +68,7 @@ def build_life_nu_component():
         if (event_start - now).days < 14:
             events_two_weeks.append(event)
 
-    return _build_calendar_component('LIFE + NU', events_two_weeks, 'static', 'single-date-day')
+    return _build_calendar_component('LIFE + NU', events_two_weeks, 'static', 'single-date-day', 'iCal://')
 
 def build_homework_component():
     events = google.fetch_homework()
@@ -81,11 +81,11 @@ def build_homework_component():
         if (event_start - now).days < 7:
             events_week.append(event)
 
-    return _build_calendar_component('UPCOMING ASSIGNMENTS', events_week, 'static', 'single-date-day')
+    return _build_calendar_component('UPCOMING ASSIGNMENTS', events_week, 'static', 'single-date-day', 'https://docs.google.com/document/d/1RtAUOrqs8wJgkiYOi4mYyfAiA823Mhcc8X4JWMlf5wk/edit')
 
 def build_lastfm_component():
     template = '''
-     <div class="component-container">
+     <div class="component-container" onclick="window.open(\'https://www.last.fm/user/andrewfinke/listening-report/week\',\'_self\')"'>
         <div class="component-container-title">{name}</div>
         <div class="component-container-tableview">
             {inner_html}
@@ -180,9 +180,9 @@ def build_theme_park_component():
         inner_html += ride_template.format(name=ride['name'], time=ride['waitTime'], color=color)
     return template.format(name='WAIT TIMES', inner_html=inner_html)
 
-def _build_calendar_component(name, events, data_type, date_format):
+def _build_calendar_component(name, events, data_type, date_format, link=None):
     template = '''
-     <div class="component-container">
+     <div class="component-container {cursor_element}" {on_click}>
         <div class="component-container-title">{name}</div>
         <div class="component-container-tableview">
             {inner_html}
@@ -207,10 +207,13 @@ def _build_calendar_component(name, events, data_type, date_format):
     if len(events) == 0:
         return None
 
+    cursor_element = 'cursor-element' if link else ''
+    on_click = 'onclick="window.open(\'{}\',\'_self\')"'.format(link) if link else ''
+  
     inner_html = ''
     for event in events:
         inner_html += event_template.format(title=event['name'], start_date=event['start'], end_date=event['end'], data_type=data_type, date_format=date_format)
-    return template.format(name=name, inner_html=inner_html)
+    return template.format(name=name, inner_html=inner_html, cursor_element=cursor_element, on_click=on_click)
 
 
 def build_monitor_component():
@@ -242,7 +245,7 @@ def build_classes_component():
         if event_start.date() == datetime.today().date():
             events_today.append(event)
     
-    return _build_calendar_component('CLASSES', events_today, 'countdown', 'hour-range')
+    return _build_calendar_component('CLASSES', events_today, 'countdown', 'hour-range', 'iCal://')
 
 def build_office_hours_component():
     events_today = []
@@ -254,11 +257,11 @@ def build_office_hours_component():
             event['name'] = event['name'].replace(': OH', '')
             events_today.append(event)
     
-    return _build_calendar_component('OFFICE HOURS', events_today, 'countdown', 'hour-range')
+    return _build_calendar_component('OFFICE HOURS', events_today, 'countdown', 'hour-range', 'iCal://')
 
 def build_l4a_component():
     events = calendar.fetch_events()['L4A']
-    return _build_calendar_component('L4A', events, 'static', 'single-date-day')
+    return _build_calendar_component('L4A', events, 'static', 'single-date-day', 'iCal://')
 
 def build_weather_component_inner_html():
     template = '''
