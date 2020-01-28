@@ -20,7 +20,7 @@ def fetch_stocks():
         return content
 
     stocks = []
-    symbols = ['AAPL', 'MSFT']
+    symbols = config.STOCKS_SYMBOLS
     for symbol in symbols:
         stocks.append({'name': symbol, 'percent': _nasdaq_stock_percent_change(symbol)})
 
@@ -39,7 +39,7 @@ def _nasdaq_stock_percent_change(symbol):
     with urllib.request.urlopen(endpoint) as url:
         data = json.loads(url.read().decode())['data']
         
-        if 'secondaryData' in data:
+        if 'secondaryData' in data and data['secondaryData']:
             data = data['secondaryData']
         else:
             data = data['primaryData']
