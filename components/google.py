@@ -27,6 +27,9 @@ def auth():
     global creds
     logger.info('auth: called')
 
+    if creds and creds.valid:
+        return
+
     if os.path.exists(config.GOOGLE_AUTH_PATH):
         with open(config.GOOGLE_AUTH_PATH, 'rb') as token:
             creds = pickle.load(token)
@@ -50,14 +53,13 @@ def fetch_homework():
     global creds, memory_cache
     logger.info('fetch_homework: called')
 
-    existing_cache = memory_cache
-    if existing_cache:
+    if memory_cache:
         logger.info('fetch_homework: checking memory cache')
     else:
         logger.info('fetch_homework: checking disk cache')
-        existing_cache = cache.fetch(config.GOOGLE_CACHE_PATH)
+        memory_cache = cache.fetch(config.GOOGLE_CACHE_PATH)
 
-    content = cache.content(existing_cache, config.GOOGLE_CACHE_LIFETIME)
+    content = cache.content(memory_cache, config.GOOGLE_CACHE_LIFETIME)
     if content:
         return content
 

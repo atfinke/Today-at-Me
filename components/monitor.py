@@ -3,7 +3,7 @@ from math import floor
 from datetime import datetime
 from subprocess import Popen, PIPE
 
-from components import logging
+from components import cache, logging
 from configuration import config
 
 logger = logging.setup_logger(
@@ -16,17 +16,12 @@ def fetch_stats():
     global memory_cache
     logger.info('fetch_stats: called')
 
-    existing_cache = memory_cache
-    if existing_cache:
+    if memory_cache:
         logger.info('fetch_stats: checking memory cache')
 
-    if existing_cache:
-        date = existing_cache[config.CACHE_DATE_KEY]
-        if datetime.now().timestamp() < date + config.MONITOR_CACHE_LIFETIME:
-            logger.info('fetch_stats: using cache')
-            return existing_cache[config.CACHE_CONTENT_KEY]
-        else:
-            logger.info('fetch_stats: cache too old {}'.format(datetime.now().timestamp() - date))
+    content = cache.content(memory_cache, config.MONITOR_CACHE_LIFETIME)
+    if content:
+        return content
 
     formatted_results = {
         config.MONITOR_CPU_KEY: floor(psutil.cpu_percent()),
@@ -46,23 +41,18 @@ def fetch_battery():
     global battery_cache
     logger.info('fetch_battery: called')
 
-    existing_cache = battery_cache
-    if existing_cache:
+    if battery_cache:
         logger.info('fetch_battery: checking memory cache')
 
-    if existing_cache:
-        date = existing_cache[config.CACHE_DATE_KEY]
-        if datetime.now().timestamp() < date + config.MONITOR_BATTERY_CACHE_LIFETIME:
-            logger.info('fetch_battery: using cache')
-            return existing_cache[config.MONITOR_INFO_KEY]
-        else:
-            logger.info('fetch_battery: cache too old {}'.format(datetime.now().timestamp() - date))
+    content = cache.content(battery_cache, config.MONITOR_BATTERY_CACHE_LIFETIME)
+    if content:
+        return content
 
     ps = Popen('pmset -g batt|grep -Eo "\d+%"', shell=True, stdout=PIPE)
     battery = int(ps.communicate()[0][:-2].decode("utf-8"))
     cache_dict = {
         config.CACHE_DATE_KEY: datetime.now().timestamp(),
-        config.MONITOR_INFO_KEY: battery
+        config.CACHE_CONTENT_KEY: battery
     }
     battery_cache = cache_dict
 

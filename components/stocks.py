@@ -1,7 +1,7 @@
 import urllib.request, json 
 from datetime import datetime
 
-from components import logging
+from components import cache, logging
 from configuration import config
 
 logger = logging.setup_logger(
@@ -12,17 +12,12 @@ memory_cache = None
 def fetch_stocks():
     global memory_cache
 
-    existing_cache = memory_cache
-    if existing_cache:
+    if memory_cache:
         logger.info('fetch_stocks: checking memory cache')
 
-    if existing_cache:
-        date = existing_cache[config.CACHE_DATE_KEY]
-        if datetime.now().timestamp() < date + config.STOCKS_CACHE_LIFETIME:
-            logger.info('fetch_stocks: using cache')
-            return existing_cache[config.CACHE_CONTENT_KEY]
-        else:
-            logger.info('fetch_stocks: cache too old {}'.format(datetime.now().timestamp() - date))
+    content = cache.content(memory_cache, config.STOCKS_CACHE_LIFETIME)
+    if content:
+        return content
 
     stocks = []
     symbols = ['AAPL', 'MSFT']

@@ -405,7 +405,7 @@ function getMonitorUpdate() {
     }
   };
   xhr.send();
-  setTimeout(function() { getMonitorUpdate(); }, 2000 + (Math.random() * 5000));
+  setTimeout(function() { getMonitorUpdate(); }, 5000 + (Math.random() * 2000));
 }
 
 function windowResized() {
@@ -497,7 +497,7 @@ function start() {
   setInterval(updateWeather, 1000 * 60 * 30);
 
   spotifyGetNowPlaying();
-  setInterval(spotifyGetNowPlaying, 2000);
+  setInterval(spotifyGetNowPlaying, 5000);
 
   getMonitorUpdate();
   updateStocks();

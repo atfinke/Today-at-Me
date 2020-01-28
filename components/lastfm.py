@@ -12,14 +12,13 @@ def fetch_tracks():
     global memory_cache
     logger.info('fetch_tracks: called')
 
-    existing_cache = memory_cache
-    if existing_cache:
+    if memory_cache:
         logger.info('fetch_tracks: checking memory cache')
     else:
         logger.info('fetch_tracks: checking disk cache')
-        existing_cache = cache.fetch(config.LASTFM_CACHE_PATH)
+        memory_cache = cache.fetch(config.LASTFM_CACHE_PATH)
 
-    content = cache.content(existing_cache, config.LASTFM_CACHE_LIFETIME)
+    content = cache.content(memory_cache, config.LASTFM_CACHE_LIFETIME)
     if content:
         return content
 

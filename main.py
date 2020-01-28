@@ -106,11 +106,6 @@ def _configure_for_connected_display():
     displays.configure_for_connected_display()
     threading.Timer(5.0, _configure_for_connected_display).start()
 
-def _prep_auth():
-    spotify.auth()
-    google.auth()
-    threading.Timer(600.0, _prep_auth).start()
-
 def _prep_caches():
     spotify.all_playlists()
     google.fetch_homework()
@@ -119,7 +114,6 @@ def _prep_caches():
     theme_parks.fetch_wait_times()
     threading.Timer(120.0, _prep_caches).start()
 
-_prep_auth()
 _prep_caches()
 _configure_for_connected_display()
 

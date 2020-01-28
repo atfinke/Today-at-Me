@@ -76,14 +76,13 @@ def all_playlists():
     global memory_playlists_cache, sp
     logger.info('all_playlists: called')
 
-    existing_cache = memory_playlists_cache
-    if existing_cache:
+    if memory_playlists_cache:
         logger.info('all_playlists: checking memory cache')
     else:
         logger.info('all_playlists: checking disk cache')
-        existing_cache = cache.fetch(config.SPOTIFY_PLAYLISTS_CACHE_PATH)
+        memory_playlists_cache = cache.fetch(config.SPOTIFY_PLAYLISTS_CACHE_PATH)
 
-    content = cache.content(existing_cache, config.SPOTIFY_PLAYLISTS_CACHE_LIFETIME)
+    content = cache.content(memory_playlists_cache, config.SPOTIFY_PLAYLISTS_CACHE_LIFETIME)
     if content:
         return content
 

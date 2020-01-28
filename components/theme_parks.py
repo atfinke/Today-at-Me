@@ -12,14 +12,13 @@ def fetch_wait_times():
     global memory_cache
     logger.info('fetch_wait_times: called')
 
-    existing_cache = memory_cache
-    if existing_cache:
+    if memory_cache:
         logger.info('fetch_wait_times: checking memory cache')
     else:
         logger.info('fetch_wait_times: checking disk cache')
-        existing_cache = cache.fetch(config.THEME_PARKS_CACHE_PATH)
+        memory_cache = cache.fetch(config.THEME_PARKS_CACHE_PATH)
 
-    content = cache.content(existing_cache, config.THEME_PARKS_CACHE_LIFETIME)
+    content = cache.content(memory_cache, config.THEME_PARKS_CACHE_LIFETIME)
     if content:
         return content
 
