@@ -449,21 +449,44 @@ function updateStocks() {
       responseDict[item['name']] = item['percent']
     }
     if (this.status == 200) {
+      const animationDuration = 0.8 * 1000
       let elements = document.getElementsByClassName('stock-detail')
+
       for (let element of elements) {
         let symbol = element.dataset.symbol
         let percent = responseDict[symbol]
-        element.innerHTML = percent
-        if (percent[0] == '-') {
-          updateContainerRowDetailColor(element, "container-row-detail-red");
-        } else {
-          updateContainerRowDetailColor(element, "container-row-detail-green");
-        }
+
+        let lastPercent = element.innerHTML
+        console.log(lastPercent);
+        
+        if (lastPercent == "") {
+          console.log('aaa');
+          element.innerHTML = percent;
+          if (percent[0] == '-') {
+            updateContainerRowDetailColor(element, "container-row-detail-red");
+          } else {
+            updateContainerRowDetailColor(element, "container-row-detail-green");
+          }
+          setTimeout(function() { 
+            element.classList.add('stock-detail-transition');
+          }, animationDuration / 2);
+        } else if (lastPercent != percent) {
+          element.style.opacity = 0.6
+          setTimeout(function() { 
+            element.innerHTML = percent;
+            if (percent[0] == '-') {
+              updateContainerRowDetailColor(element, "container-row-detail-red");
+            } else {
+              updateContainerRowDetailColor(element, "container-row-detail-green");
+            }
+            element.style.opacity = 1
+          }, animationDuration / 2);
+        } 
       }
     }
   };
   xhr.send();
-  setTimeout(function() { updateStocks(); }, 4000 + (Math.random() * 5000));
+  setTimeout(function() { updateStocks(); }, 10000 + (Math.random() * 5000));
 }
 
 function clearCache() {

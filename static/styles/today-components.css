@@ -199,3 +199,7 @@ body {
 .stock-detail {
 	font-weight: 350;
 }
+
+.stock-detail-transition {
+	transition: 0.4s ease-in-out;
+}
