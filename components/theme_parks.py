@@ -32,16 +32,12 @@ def fetch_wait_times():
             rides.extend(park_rides)
 
     logger.info('fetch_wait_times: got {} rides'.format(len(rides)))
- 
-    cache_dict = {
-        config.CACHE_DATE_KEY: datetime.now().timestamp(),
-        config.CACHE_CONTENT_KEY: rides
-    }
 
-    cache.save(cache_dict, config.THEME_PARKS_CACHE_PATH)
-    memory_cache = cache_dict
+    memory_cache = cache.save(rides, config.THEME_PARKS_CACHE_PATH)
     return rides
 
 def invalidate_memory_cache():
+    logger.info('invalidate_memory_cache: called')
+
     global memory_cache
     memory_cache = None

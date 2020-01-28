@@ -97,13 +97,7 @@ def all_playlists():
     logger.info('all_playlists: got {} playlists'.format(
         len(formatted_playlists)))
 
-    cache_dict = {
-        config.CACHE_DATE_KEY: datetime.now().timestamp(),
-        config.CACHE_CONTENT_KEY: formatted_playlists
-    }
-    cache.save(cache_dict, config.SPOTIFY_PLAYLISTS_CACHE_PATH)
-    memory_playlists_cache = cache_dict
-
+    memory_playlists_cache = cache.save(formatted_playlists, config.SPOTIFY_PLAYLISTS_CACHE_PATH)
     return formatted_playlists
 
 
@@ -158,5 +152,7 @@ def play_track(track, artist):
         return 'Error', 500
 
 def invalidate_memory_cache():
+    logger.info('invalidate_memory_cache: called')
+
     global memory_playlists_cache
     memory_playlists_cache = None

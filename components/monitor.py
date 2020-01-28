@@ -69,5 +69,7 @@ def fetch_battery():
     return battery
     
 def invalidate_memory_cache():
+    logger.info('invalidate_memory_cache: called')
+
     global battery_cache
     battery_cache = None

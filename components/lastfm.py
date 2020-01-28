@@ -30,15 +30,11 @@ def fetch_tracks():
         for track in tracks:
             formatted_tracks.append({'name': track['name'], 'count': track['playcount'], 'artist': track['artist']['name']})
     
-    cache_dict = {
-        config.CACHE_DATE_KEY: datetime.now().timestamp(),
-        config.CACHE_CONTENT_KEY: formatted_tracks
-    }
-    cache.save(cache_dict, config.LASTFM_CACHE_PATH)
-    memory_cache = cache_dict
-
+    memory_cache = cache.save(formatted_tracks, config.LASTFM_CACHE_PATH)
     return formatted_tracks
 
 def invalidate_memory_cache():
+    logger.info('invalidate_memory_cache: called')
+
     global memory_cache
     memory_cache = None

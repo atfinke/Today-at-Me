@@ -97,13 +97,7 @@ def fetch_homework():
     
     logger.info('fetch_homework: fetched {} classes'.format(len(formatted_assignments)))
 
-    cache_dict = {
-        config.CACHE_DATE_KEY: datetime.now().timestamp(),
-        config.CACHE_CONTENT_KEY: formatted_assignments
-    }
-    cache.save(cache_dict, config.GOOGLE_CACHE_PATH)
-    memory_cache = cache_dict
-
+    memory_cache = cache.save(formatted_assignments, config.GOOGLE_CACHE_PATH)
     return formatted_assignments
 
 def invalidate_memory_cache():

@@ -57,16 +57,11 @@ def fetch_events():
             events.append({'name': event._.title, 'start': s, 'end': e})
         formatted_results[cal.title()] = events
 
-    cache_dict = {
-        config.CACHE_DATE_KEY: datetime.now().timestamp(),
-        config.CACHE_CONTENT_KEY: formatted_results
-    }
-
-    cache.save(cache_dict, config.CALENDAR_CACHE_PATH)
-    memory_cache = cache_dict
-
+    memory_cache = cache.save(formatted_results, config.CALENDAR_CACHE_PATH)
     return formatted_results
 
 def invalidate_memory_cache():
+    logger.info('invalidate_memory_cache: called')
+
     global memory_cache
     memory_cache = None
