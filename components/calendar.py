@@ -37,8 +37,8 @@ def fetch_events():
         logger.info(cal.title())
 
     cst = tz.gettz('America/Chicago')
-    today = datetime.utcnow().date()
-    start_dt = datetime(today.year, today.month, today.day, tzinfo=tz.tzutc()).astimezone(cst)
+    today = datetime.now().date()
+    start_dt = datetime(today.year, today.month, today.day, tzinfo=cst)
     end_dt = start_dt + timedelta(30)
 
     start_int = int(start_dt.strftime("%s"))
