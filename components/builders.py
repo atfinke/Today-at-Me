@@ -32,13 +32,15 @@ def build_header_now_playing_column_inner_html():
         pn = '-'
     return template.format(track_uri= turi, playlist_uri=puri, playlist_name=pn, track_name=tn, destination=random.randint(1, 100_000_000))
 
-def build_spotify_add_to_playlist_inner_html():
+def build_spotify_add_to_playlist_html():
     template = '''
-    <div id="spotify-add-to-playlist" class="container-single-row">
-        <select id="spotify-playlist-selection" onchange="spotifyPlaylistSelectionChanged()">
-            {options}
-        </select>
-        <div id="spotify-playlist-selection-button" onclick="spotifyPlaylistAddButtonClicked()">ADD</div>
+    <div class="component-container">      
+        <div id="spotify-add-to-playlist" class="container-single-row">
+            <select id="spotify-playlist-selection" onchange="spotifyPlaylistSelectionChanged()">
+                {options}
+            </select>
+            <div id="spotify-playlist-selection-button" onclick="spotifyPlaylistAddButtonClicked()">ADD</div>
+        </div>
     </div>
     '''
 
@@ -263,11 +265,13 @@ def build_l4a_component():
     events = calendar.fetch_events()['L4A']
     return _build_calendar_component('L4A', events, 'static', 'single-date-day', 'iCal://')
 
-def build_weather_component_inner_html():
+def build_weather_component_html():
     template = '''
-    <div class="container-single-row weather-container" data-latitude="{latitude}" data-longitude="{longitude}" data-api-key="{API_KEY}">
-        <div class="container-single-row-title"></div>
-        <div class="container-single-row-detail"></div>
+    <div class="component-container">
+        <div class="container-single-row weather-container" data-latitude="{latitude}" data-longitude="{longitude}" data-api-key="{API_KEY}">
+            <div class="container-single-row-title"></div>
+            <div class="container-single-row-detail"></div>
+        </div>        
     </div>
     '''
 

@@ -91,10 +91,8 @@
                 </div>
             </div>
 
-            {% if weather_inner_html %}
-            <div class="component-container">
-                {{ weather_inner_html|safe }}
-            </div>
+            {% if weather_component_html %}
+            {{ weather_component_html|safe }}
             {% else %}
             {% endif %}
 
@@ -108,10 +106,8 @@
             {% else %}
             {% endif %}
             
-            {% if spotify_add_to_playlist_inner_html %}
-            <div class="component-container">
-                {{ spotify_add_to_playlist_inner_html|safe }}
-            </div>
+            {% if spotify_add_to_playlist_html %}
+            {{ spotify_add_to_playlist_html|safe }}
             {% else %}
             {% endif %}
         </div>

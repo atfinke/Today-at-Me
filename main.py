@@ -33,7 +33,7 @@ def add_header(r):
 def today():
     return render_template('today.html', 
     header_now_playing_column_inner_html=builders.build_header_now_playing_column_inner_html(), 
-    spotify_add_to_playlist_inner_html=builders.build_spotify_add_to_playlist_inner_html(), 
+    spotify_add_to_playlist_html=builders.build_spotify_add_to_playlist_html(), 
     classes_component_html=builders.build_classes_component(), 
     office_hours_component_html=builders.build_office_hours_component(),
     life_nu_component_html=builders.build_life_nu_component(),
@@ -44,7 +44,7 @@ def today():
     theme_park_component_html=builders.build_theme_park_component(),
     stocks_component_html=builders.build_stocks_component(),
     monitor_component_html=builders.build_monitor_component(),
-    weather_inner_html=builders.build_weather_component_inner_html())
+    weather_component_html=builders.build_weather_component_html())
 
 @app.route("/clear_cache", methods=["POST"])
 def clear_cache():
