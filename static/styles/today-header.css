@@ -6,6 +6,10 @@
 	--top-column-margin: 25px;
 }
 
+::-webkit-scrollbar {
+    display: none;
+}
+
 #today-header {
 	background-color: rgb(18, 18, 18);
 	display: flex;
