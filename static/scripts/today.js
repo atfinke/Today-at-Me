@@ -129,11 +129,15 @@ function updateContainerRowDetails() {
     let min = startDate.getMinutes();
     let minString = min == 0 ? "" : ":" + paddedStringForNum(min);
 
-
-
     if (nowTime - endDate > 0) {
-      element.innerHTML = "DONE";
-      updateContainerRowDetailColor(element, "container-row-detail-green");
+      if (element.dataset.showTodayOnDate == 'True') {
+        element.innerHTML = "Today";
+        updateContainerRowDetailColor(element, "container-row-detail-blue");
+      } else {
+        element.innerHTML = "DONE";
+        updateContainerRowDetailColor(element, "container-row-detail-green");
+      }
+      
     } else if (nowTime - startDate > 0) {
       let distance = endDateTime - nowTime;
       const minutes = Math.floor(distance / (1000 * 60));
@@ -169,7 +173,7 @@ function updateTodayDate() {
   const day = now.getDate();
   const hours = now.getHours();
   const min = now.getMinutes();
-  const suffix = hours > 12 ? "PM" : "AM";
+  const suffix = hours >= 12 ? "PM" : "AM";
 
   document.getElementById("header-today-date").innerHTML =
     months[now.getMonth()] +
@@ -244,13 +248,6 @@ function lastfmRowClicked(element_id) {
   );
   xhr.onreadystatechange = function () {
     if (this.readyState != 4) return;
-    console.log(this.status);
-    console.log(this.response);
-    
-    if (this.status == 200) {
-
-    } else {
-    }
   };
   xhr.send();
 }
@@ -456,10 +453,7 @@ function updateStocks() {
         let percent = responseDict[symbol]
 
         let lastPercent = element.innerHTML
-        console.log(lastPercent);
-        
         if (lastPercent == "") {
-          console.log('aaa');
           element.innerHTML = percent;
           if (percent[0] == '-') {
             updateContainerRowDetailColor(element, "container-row-detail-red");

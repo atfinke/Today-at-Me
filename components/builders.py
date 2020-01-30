@@ -45,7 +45,7 @@ def build_spotify_add_to_playlist_html():
     '''
 
     playlists = spotify.fetch_playlists()
-    if len(playlists) == 0:
+    if not playlists or len(playlists) == 0:
         return None
 
     option_template = '<option value="{uri}">{name}</option>\n'
@@ -56,7 +56,7 @@ def build_spotify_add_to_playlist_html():
 
 def build_theatre_component():
     events = calendar.fetch_events()['A.Theatre']
-    return _build_calendar_component('A.THEATRE', events, 'static', 'single-date-day', 'https://www.andrewfinke.com/theatre')
+    return _build_calendar_component('A.THEATRE', events, 'static', 'https://www.andrewfinke.com/theatre')
 
 def build_life_nu_component():
     events = calendar.fetch_events()
@@ -70,17 +70,20 @@ def build_life_nu_component():
         if (event_start - now).days < 14:
             events_two_weeks.append(event)
 
-    return _build_calendar_component('LIFE + NU', events_two_weeks, 'static', 'single-date-day', 'iCal://')
+    return _build_calendar_component('LIFE + NU', events_two_weeks, 'static', 'iCal://')
 
 def build_homework_component():
     events = google.fetch_homework()
     events = sorted(events, key = lambda i: i['start'])
 
+    if not events or len(events) == 0:
+        return None
+
     now = datetime.today()
     events_week = []
     for event in events:
         event_start = datetime.fromtimestamp(event['start'])
-        if (event_start - now).days < 7:
+        if (event_start - now).days <= 7:
             events_week.append(event)
 
     return _build_calendar_component('UPCOMING ASSIGNMENTS', events_week, 'static', 'single-date-day', 'https://docs.google.com/document/d/1RtAUOrqs8wJgkiYOi4mYyfAiA823Mhcc8X4JWMlf5wk/edit')
@@ -108,7 +111,7 @@ def build_lastfm_component():
     '''
 
     tracks = lastfm.fetch_tracks()
-    if len(tracks) == 0:
+    if not tracks or len(tracks) == 0:
         return None
 
     inner_html = ''
@@ -137,7 +140,7 @@ def build_stocks_component():
     '''
 
     fetched_stocks = stocks.fetch_stocks()
-    if len(fetched_stocks) == 0:
+    if not fetched_stocks or len(fetched_stocks) == 0:
         return None
 
     inner_html = ''
@@ -170,7 +173,7 @@ def build_theme_park_component():
     rides = theme_parks.fetch_wait_times()
     rides = sorted(rides, key = lambda i: int(i['waitTime']), reverse=True)[:config.THEME_PARKS_MAX_RIDES] 
 
-    if len(rides) == 0 or int(rides[-1]['waitTime']) == 0:
+    if not rides or len(rides) == 0 or int(rides[-1]['waitTime']) == 0:
         return None
 
     inner_html = ''
@@ -179,7 +182,7 @@ def build_theme_park_component():
         inner_html += ride_template.format(name=ride['name'], time=ride['waitTime'], color=color)
     return template.format(name='WAIT TIMES', inner_html=inner_html)
 
-def _build_calendar_component(name, events, data_type, date_format, link=None):
+def _build_calendar_component(name, events, data_type, link=None, show_today_on_date=False):
     template = '''
      <div class="component-container {cursor_element}" {on_click}>
         <div class="component-container-title">{name}</div>
@@ -196,22 +199,23 @@ def _build_calendar_component(name, events, data_type, date_format, link=None):
         </div>
         <div class="component-container-tableview-row-detail"
             data-type="{data_type}" data-start-date="{start_date}"
-            data-end-date="{end_date}" data-date-format="{date_format}">
+            data-end-date="{end_date}" data-show-today-on-date="{show_today_on_date}">
             12:50 - 12:00 PM
         </div>
     </div>
 
     '''
 
-    if len(events) == 0:
+    if not events or len(events) == 0:
         return None
 
     cursor_element = 'cursor-element' if link else ''
     on_click = 'onclick="window.open(\'{}\',\'_self\')"'.format(link) if link else ''
+    show_today_on_date_html = 'True' if show_today_on_date else 'False'
   
     inner_html = ''
     for event in events:
-        inner_html += event_template.format(title=event['name'], start_date=event['start'], end_date=event['end'], data_type=data_type, date_format=date_format)
+        inner_html += event_template.format(title=event['name'], start_date=event['start'], end_date=event['end'], data_type=data_type, show_today_on_date=show_today_on_date_html)
     return template.format(name=name, inner_html=inner_html, cursor_element=cursor_element, on_click=on_click)
 
 
@@ -244,7 +248,7 @@ def build_classes_component():
         if event_start.date() == datetime.today().date():
             events_today.append(event)
     
-    return _build_calendar_component('CLASSES', events_today, 'countdown', 'hour-range', 'iCal://')
+    return _build_calendar_component('CLASSES', events_today, 'countdown', 'iCal://')
 
 def build_office_hours_component():
     events_today = []
@@ -256,11 +260,11 @@ def build_office_hours_component():
             event['name'] = event['name'].replace(': OH', '')
             events_today.append(event)
     
-    return _build_calendar_component('OFFICE HOURS', events_today, 'countdown', 'hour-range', 'iCal://')
+    return _build_calendar_component('OFFICE HOURS', events_today, 'countdown', 'iCal://')
 
 def build_l4a_component():
     events = calendar.fetch_events()['L4A']
-    return _build_calendar_component('L4A', events, 'static', 'single-date-day', 'iCal://')
+    return _build_calendar_component('L4A', events, 'static', 'iCal://')
 
 def build_weather_component_html():
     template = '''

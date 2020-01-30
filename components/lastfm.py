@@ -22,15 +22,18 @@ def fetch_tracks(request_from_server=False):
     if content:
         return content
 
-    formatted_tracks = []
-    endpoint = 'https://ws.audioscrobbler.com/2.0/?method=user.gettoptracks&period=7day&format=json&limit=5&user=' + config.LASTFM_USERNAME + '&api_key=' + config.LASTFM_API_KEY 
-    with urllib.request.urlopen(endpoint) as url:
-        tracks = json.loads(url.read().decode())['toptracks']['track']
-        for track in tracks:
-            formatted_tracks.append({'name': track['name'], 'count': track['playcount'], 'artist': track['artist']['name']})
-    
-    memory_cache = cache.save(formatted_tracks, config.LASTFM_CACHE_PATH)
-    return formatted_tracks
+    try:
+        formatted_tracks = []
+        endpoint = 'https://ws.audioscrobbler.com/2.0/?method=user.gettoptracks&period=7day&format=json&limit=5&user=' + config.LASTFM_USERNAME + '&api_key=' + config.LASTFM_API_KEY 
+        with urllib.request.urlopen(endpoint) as url:
+            tracks = json.loads(url.read().decode())['toptracks']['track']
+            for track in tracks:
+                formatted_tracks.append({'name': track['name'], 'count': track['playcount'], 'artist': track['artist']['name']})
+        
+        memory_cache = cache.save(formatted_tracks, config.LASTFM_CACHE_PATH)
+        return formatted_tracks
+    except:
+        return None
 
 def invalidate_memory_cache():
     logger.info('invalidate_memory_cache: called')

@@ -28,9 +28,13 @@ def auth():
 def now_playing_info():
     auth()
     global sp
-    track = sp.currently_playing()
-    if not track:
+    try:
+        track = sp.currently_playing()
+        if not track:
+            return None, None, None, None
+    except:
         return None, None, None, None
+        
     item = track['item']
     all_images = sorted(item['album']['images'], key=lambda k: k['height'])
     for image in all_images:

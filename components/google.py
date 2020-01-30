@@ -63,44 +63,46 @@ def fetch_homework(request_from_server=False):
     if content:
         return content
 
-    service = build('drive', 'v3', credentials=creds)
-    request = service.files().export_media(fileId=config.GOOGLE_HOMEWORK_DOC_ID, mimeType='text/html')
-    
-    fh = io.BytesIO()
-    downloader = MediaIoBaseDownload(fh, request)
-    done = False
-    while done is False:
-        status, done = downloader.next_chunk()
-        logger.info("fetch_homework: Download %d%%." % int(status.progress() * 100))
-
-    html = fh.getvalue().decode('UTF-8')
-    raw_text = html2text(html)
-    classes = raw_text.split('Flow:')[0]
-
-    for key in config.GOOGLE_HOMEWORK_DOC_REPLACEMENT.keys():
-        classes = classes.replace(key, config.GOOGLE_HOMEWORK_DOC_REPLACEMENT[key])
-
-    formatted_assignments = []
-    classes = classes.split('<class>')[1:]
-    for class_str in classes:
-        classes_split = class_str.split('\n')
-        class_name = classes_split[0]
-
+    try:
+        service = build('drive', 'v3', credentials=creds)
+        request = service.files().export_media(fileId=config.GOOGLE_HOMEWORK_DOC_ID, mimeType='text/html')
         
-        for raw_assignment in classes_split[1:]:
-            raw_assignment = raw_assignment.replace('  * ', '')
-            detail_split = raw_assignment.split('] ')
-            if len(detail_split) == 2:
-                date = detail_split[0][1:]
-                date_split = date.split('/')
-                date_dt = datetime(2020, int(date_split[0]), int(date_split[1]))
-                name = detail_split[1]
-                formatted_assignments.append({'name': class_name + ': ' + name, 'start': date_dt.timestamp(), 'end': date_dt.timestamp()})
-    
-    logger.info('fetch_homework: fetched {} classes'.format(len(formatted_assignments)))
+        fh = io.BytesIO()
+        downloader = MediaIoBaseDownload(fh, request)
+        done = False
+        while done is False:
+            status, done = downloader.next_chunk()
+            logger.info("fetch_homework: Download %d%%." % int(status.progress() * 100))
 
-    memory_cache = cache.save(formatted_assignments, config.GOOGLE_CACHE_PATH)
-    return formatted_assignments
+        html = fh.getvalue().decode('UTF-8')
+        raw_text = html2text(html)
+        classes = raw_text.split('Flow:')[0]
+
+        for key in config.GOOGLE_HOMEWORK_DOC_REPLACEMENT.keys():
+            classes = classes.replace(key, config.GOOGLE_HOMEWORK_DOC_REPLACEMENT[key])
+
+        formatted_assignments = []
+        classes = classes.split('<class>')[1:]
+        for class_str in classes:
+            classes_split = class_str.split('\n')
+            class_name = classes_split[0]
+
+            for raw_assignment in classes_split[1:]:
+                raw_assignment = raw_assignment.replace('  * ', '')
+                detail_split = raw_assignment.split('] ')
+                if len(detail_split) == 2:
+                    date = detail_split[0][1:]
+                    date_split = date.split('/')
+                    date_dt = datetime(2020, int(date_split[0]), int(date_split[1]))
+                    name = detail_split[1]
+                    formatted_assignments.append({'name': class_name + ': ' + name, 'start': date_dt.timestamp(), 'end': date_dt.timestamp()})
+        
+        logger.info('fetch_homework: fetched {} classes'.format(len(formatted_assignments)))
+
+        memory_cache = cache.save(formatted_assignments, config.GOOGLE_CACHE_PATH)
+        return formatted_assignments
+    except:
+        return None
 
 def invalidate_memory_cache():
     global memory_cache

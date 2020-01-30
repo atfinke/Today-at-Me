@@ -19,20 +19,22 @@ def fetch_stocks():
     if content:
         return content
 
-    stocks = []
-    symbols = config.STOCKS_SYMBOLS
-    for symbol in symbols:
-        stocks.append({'name': symbol, 'percent': _nasdaq_stock_percent_change(symbol)})
+    try:
+        stocks = []
+        symbols = config.STOCKS_SYMBOLS
+        for symbol in symbols:
+            stocks.append({'name': symbol, 'percent': _nasdaq_stock_percent_change(symbol)})
 
-    stocks.extend(_exchanges())
+        stocks.extend(_exchanges())
 
-    cache_dict = {
-        config.CACHE_DATE_KEY: datetime.now().timestamp(),
-        config.CACHE_CONTENT_KEY: stocks
-    }
-    memory_cache = cache_dict
-
-    return stocks
+        cache_dict = {
+            config.CACHE_DATE_KEY: datetime.now().timestamp(),
+            config.CACHE_CONTENT_KEY: stocks
+        }
+        memory_cache = cache_dict
+        return stocks
+    except:
+        return None
 
 def _nasdaq_stock_percent_change(symbol):
     endpoint = 'https://api.nasdaq.com/api/quote/' + symbol + '/info?assetclass=stocks'
