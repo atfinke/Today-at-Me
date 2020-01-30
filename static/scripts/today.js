@@ -379,10 +379,6 @@ function colorForAmount(element, amount) {
 }
 
 function getMonitorUpdate() {
-  let cpuElement = document.getElementById("monitor-cpu")
-  let memoryElement = document.getElementById("monitor-memory")
-  let batteryElement = document.getElementById("monitor-battery")
-
   let xhr = new XMLHttpRequest();
   xhr.open("GET", "/monitor/now", true);
   xhr.onreadystatechange = function() {
@@ -390,17 +386,55 @@ function getMonitorUpdate() {
 
     let response = JSON.parse(this.responseText);
     if (this.status == 200) {
-      let cpu = response['cpu']
-      cpuElement.innerHTML = cpu + '%';
-      colorForAmount(cpuElement, cpu);
 
-      let mem = response['mem']
-      memoryElement.innerHTML = mem + '%';
-      colorForAmount(memoryElement, mem)
+      let key = 'cpu'
+      if (key in response) {
+        let element = document.getElementById("monitor-cpu")
+        let value = response[key]
+        element.innerHTML = value + '%';
+        colorForAmount(element, value);
+      }
 
-      let bat = response['bat-l']
-      batteryElement.innerHTML = bat + '%';
-      colorForAmount(batteryElement, 1 - bat)
+      key = 'mem'
+      if (key in response) {
+        let element = document.getElementById("monitor-mem")
+        let value = response[key]
+        element.innerHTML = value + '%';
+        colorForAmount(element, value);
+      }
+
+      key = 'bat'
+      if (key in response) {
+        let element = document.getElementById("monitor-bat")
+        let value = response[key]
+        element.innerHTML = bat + '%';
+        colorForAmount(element, 1- value);
+      }
+
+      key = 'CPU die temperature: '
+      if (key in response) {
+        let element = document.getElementById("monitor-cpu-temp")
+        let value = response[key]
+        element.innerHTML = value;
+        colorForAmount(element, 50);
+      }
+
+      key = 'GPU die temperature: '
+      if (key in response) {
+        let element = document.getElementById("monitor-gpu-temp")
+        let value = response[key]
+        element.innerHTML = value;
+        colorForAmount(element, 50);
+      }
+
+      key = 'Fan: '
+      if (key in response) {
+        let element = document.getElementById("monitor-fan")
+        let value = response[key]
+        element.innerHTML = value;
+        colorForAmount(element, 50);
+      }
+      
     }
   };
   xhr.send();

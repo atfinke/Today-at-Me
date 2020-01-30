@@ -8,6 +8,8 @@ import components.google as google
 import components.lastfm as lastfm
 import components.theme_parks as theme_parks
 import components.stocks as stocks
+import components.monitor as monitor
+
 import components.logging as logging
 
 from configuration import config
@@ -220,24 +222,34 @@ def _build_calendar_component(name, events, data_type, link=None, show_today_on_
 
 
 def build_monitor_component():
-    return '''
+    template = '''
      <div class="component-container">
         <div class="component-container-tableview">
-            <div class="component-container-tableview-row">
-                <div class="component-container-tableview-row-title">CPU</div>
-                <div id="monitor-cpu" class="component-container-tableview-row-detail"></div>
-            </div>
-            <div class="component-container-tableview-row">
-                <div class="component-container-tableview-row-title">Memory</div>
-                <div id="monitor-memory" class="component-container-tableview-row-detail"></div>
-            </div>
-            <div class="component-container-tableview-row">
-                <div class="component-container-tableview-row-title">Battery</div>
-                <div id="monitor-battery" class="component-container-tableview-row-detail"></div>
-            </div>
+            {inner_html}
         </div>
     </div>
     '''
+
+    row_template = '''
+    <div class="component-container-tableview-row">
+        <div class="component-container-tableview-row-title">{name}</div>
+        <div id="{id}" class="component-container-tableview-row-detail"></div>
+    </div>
+
+    '''
+
+    keys = list(monitor.fetch_stats().keys())
+    if not keys or len(keys) == 0:
+        return None
+
+    sorted_by_priority = sorted(keys, key=lambda k: config.MONITOR_MAPPING[k][config.MONITOR_MAPPING_PRIORITY_KEY])
+    
+    inner_html = ''
+    for key in sorted_by_priority:
+        mapping = config.MONITOR_MAPPING[key]
+        inner_html += row_template.format(id=mapping[config.MONITOR_MAPPING_ID_KEY], name=mapping[config.MONITOR_MAPPING_NAME_KEY])
+
+    return template.format(inner_html=inner_html)
 
 def build_classes_component():
     events_today = []
