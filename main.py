@@ -95,8 +95,6 @@ def spotify_play_track():
     return spotify.play_track(track_name, artist)
 
 def _configure_for_connected_display():
-    if monitor.is_mac_pro():
-        return
     displays.configure_for_connected_display()
 
     display_thread = threading.Timer(config.CHECK_DISPLAY_INTERVAL, _configure_for_connected_display)
@@ -115,8 +113,10 @@ def _prep_caches():
     cache_thread.start()
 
 _prep_caches()
-_configure_for_connected_display()
 
 if __name__ == '__main__':
+    if not monitor.is_mac_pro():
+        _configure_for_connected_display()
+
     app.run(host='127.0.0.1', port=8080, debug=False)
     print('DONE')
