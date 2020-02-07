@@ -58,7 +58,8 @@ def build_spotify_add_to_playlist_html():
 
 def build_theatre_component():
     events = calendar.fetch_events()['A.Theatre']
-    return _build_calendar_component('A.THEATRE', events, 'static', 'https://www.andrewfinke.com/theatre')
+    return _build_calendar_component(name='A.THEATRE', events=events, data_type='static', link='https://www.andrewfinke.com/theatre', show_today_on_date=False)
+    
 
 def build_life_nu_component():
     events = calendar.fetch_events()
@@ -72,7 +73,8 @@ def build_life_nu_component():
         if (event_start - now).days < 14:
             events_two_weeks.append(event)
 
-    return _build_calendar_component('LIFE + NU', events_two_weeks, 'static', 'iCal://')
+    return _build_calendar_component(name='LIFE + NU', events=events_two_weeks, data_type='static', link='iCal://', show_today_on_date=False)
+    
 
 def build_homework_component():
     events = google.fetch_homework()
@@ -88,8 +90,8 @@ def build_homework_component():
         if (event_start - now).days <= 7:
             events_week.append(event)
 
-    return _build_calendar_component('UPCOMING ASSIGNMENTS', events_week, 'static', 'single-date-day', 'https://docs.google.com/document/d/1RtAUOrqs8wJgkiYOi4mYyfAiA823Mhcc8X4JWMlf5wk/edit')
-
+    return _build_calendar_component(name='UPCOMING ASSIGNMENTS', events=events_week, data_type='static', link='https://docs.google.com/document/d/1RtAUOrqs8wJgkiYOi4mYyfAiA823Mhcc8X4JWMlf5wk/edit', show_today_on_date=False)
+    
 def build_lastfm_component():
     template = '''
      <div class="component-container">
@@ -184,7 +186,7 @@ def build_theme_park_component():
         inner_html += ride_template.format(name=ride['name'], time=ride['waitTime'], color=color)
     return template.format(name='WAIT TIMES', inner_html=inner_html)
 
-def _build_calendar_component(name, events, data_type, link=None, show_today_on_date=False):
+def _build_calendar_component(name, events, data_type, link, show_today_on_date):
     template = '''
      <div class="component-container {cursor_element}" {on_click}>
         <div class="component-container-title">{name}</div>
@@ -260,7 +262,8 @@ def build_classes_component():
         if event_start.date() == datetime.today().date():
             events_today.append(event)
     
-    return _build_calendar_component('CLASSES', events_today, 'countdown', 'iCal://')
+    return _build_calendar_component(name='CLASSES', events=events_today, data_type='countdown', link='iCal://', show_today_on_date=False)
+    
 
 def build_office_hours_component():
     events_today = []
@@ -272,11 +275,13 @@ def build_office_hours_component():
             event['name'] = event['name'].replace(': OH', '')
             events_today.append(event)
     
-    return _build_calendar_component('OFFICE HOURS', events_today, 'countdown', 'iCal://')
+    return _build_calendar_component(name='OFFICE HOURS', events=events_today, data_type='countdown', link='iCal://', show_today_on_date=False)
+    
 
 def build_l4a_component():
     events = calendar.fetch_events()['L4A']
-    return _build_calendar_component('L4A', events, 'static', 'iCal://')
+    return _build_calendar_component(name='L4A', events=events, data_type='static', link='iCal://', show_today_on_date=False)
+    
 
 def build_weather_component_html():
     template = '''
