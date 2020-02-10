@@ -90,8 +90,9 @@ def build_homework_component():
         if (event_start - now).days <= 7:
             events_week.append(event)
 
-    return _build_calendar_component(name='UPCOMING ASSIGNMENTS', events=events_week, data_type='static', link='https://docs.google.com/document/d/1RtAUOrqs8wJgkiYOi4mYyfAiA823Mhcc8X4JWMlf5wk/edit', show_today_on_date=False)
-    
+    return _build_calendar_component(name='UPCOMING ASSIGNMENTS', events=events_week, data_type='static', link='https://docs.google.com/document/d/1RtAUOrqs8wJgkiYOi4mYyfAiA823Mhcc8X4JWMlf5wk/edit', show_today_on_date=True)
+
+
 def build_lastfm_component():
     template = '''
      <div class="component-container">
