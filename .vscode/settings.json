@@ -1,3 +1,4 @@
 {
-    "python.pythonPath": "/Users/andrewfinke/opt/miniconda3/envs/today/bin/python"
+  "python.pythonPath": "/Users/andrewfinke/opt/miniconda3/envs/today/bin/python",
+  "python.formatting.autopep8Args": ["--max-line-length=200"]
 }
