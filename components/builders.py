@@ -14,6 +14,7 @@ import components.logging as logging
 
 from configuration import config
 
+
 def build_header_now_playing_column_inner_html():
     template = '''
     <div id="now-playing-metadata" data-track-uri="{track_uri}" data-playlist-uri="{playlist_uri}">
@@ -32,7 +33,8 @@ def build_header_now_playing_column_inner_html():
         tn = '-'
     if pn == None:
         pn = '-'
-    return template.format(track_uri= turi, playlist_uri=puri, playlist_name=pn, track_name=tn, destination=random.randint(1, 100_000_000))
+    return template.format(track_uri=turi, playlist_uri=puri, playlist_name=pn, track_name=tn, destination=random.randint(1, 100_000_000))
+
 
 def build_spotify_add_to_playlist_html():
     template = '''
@@ -56,29 +58,31 @@ def build_spotify_add_to_playlist_html():
         options_html += option_template.format(uri=playlist['uri'], name=playlist['name'])
     return template.format(options=options_html)
 
+
 def build_theatre_component():
     events = calendar.fetch_events()['A.Theatre']
     return _build_calendar_component(name='A.THEATRE', events=events, data_type='static', link='https://www.andrewfinke.com/theatre', show_today_on_date=False)
-    
+
 
 def build_life_nu_component():
     events = calendar.fetch_events()
-    all_events = events['Life'] + events['NU'] + events['andrewfinke2021@u.northwestern.edu']
-    all_events = sorted(all_events, key = lambda i: i['start']) 
+    all_events = events['Life'] + events['NU'] + \
+        events['andrewfinke2021@u.northwestern.edu']
+    all_events = sorted(all_events, key=lambda i: i['start'])
 
     now = datetime.today()
-    events_two_weeks = []
+    events = []
     for event in all_events:
         event_start = datetime.fromtimestamp(event['start'])
-        if (event_start - now).days < 14:
-            events_two_weeks.append(event)
+        if (event_start - now).days < config.CALENDAR_LIFE_EVENT_DAY_RANGE:
+            events.append(event)
 
-    return _build_calendar_component(name='LIFE + NU', events=events_two_weeks, data_type='static', link='iCal://', show_today_on_date=False)
-    
+    return _build_calendar_component(name='LIFE + NU', events=events, data_type='static', link='iCal://', show_today_on_date=False)
+
 
 def build_homework_component():
     events = google.fetch_homework()
-    events = sorted(events, key = lambda i: i['start'])
+    events = sorted(events, key=lambda i: i['start'])
 
     if not events or len(events) == 0:
         return None
@@ -102,7 +106,7 @@ def build_lastfm_component():
         </div>
     </div>
     '''
-    
+
     track_template = '''
     <div id="{id}" class="component-container-tableview-row cursor-element" data-name="{data_name}" data-artist="{data_artist}" onClick="lastfmRowClicked(this.id)">
         <div class="component-container-tableview-row-title">
@@ -125,6 +129,7 @@ def build_lastfm_component():
         inner_html += track_template.format(id=id, name=track['name'], count=track['count'], data_name=track['name'], data_artist=track['artist'])
     return template.format(name='TOP TRACKS LAST WEEK', inner_html=inner_html)
 
+
 def build_stocks_component():
     template = '''
      <div class="component-container cursor-element" onclick="window.open(\'https://oltx.fidelity.com/ftgw/fbc/oftop/portfolio#summary',\'_self\')"'>
@@ -133,7 +138,7 @@ def build_stocks_component():
         </div>
     </div>
     '''
-    
+
     stock_template = '''
     <div class="component-container-tableview-row">
         <div class="component-container-tableview-row-title">
@@ -153,6 +158,7 @@ def build_stocks_component():
         inner_html += stock_template.format(symbol=stock['name'])
     return template.format(inner_html=inner_html)
 
+
 def build_theme_park_component():
     template = '''
      <div class="component-container">
@@ -162,7 +168,7 @@ def build_theme_park_component():
         </div>
     </div>
     '''
-    
+
     ride_template = '''
     <div class="component-container-tableview-row">
         <div class="component-container-tableview-row-title">
@@ -176,7 +182,7 @@ def build_theme_park_component():
     '''
 
     rides = theme_parks.fetch_wait_times()
-    rides = sorted(rides, key = lambda i: int(i['waitTime']), reverse=True)[:config.THEME_PARKS_MAX_RIDES] 
+    rides = sorted(rides, key=lambda i: int(i['waitTime']), reverse=True)[:config.THEME_PARKS_MAX_RIDES]
 
     if not rides or len(rides) == 0 or int(rides[-1]['waitTime']) == 0:
         return None
@@ -187,6 +193,7 @@ def build_theme_park_component():
         inner_html += ride_template.format(name=ride['name'], time=ride['waitTime'], color=color)
     return template.format(name='WAIT TIMES', inner_html=inner_html)
 
+
 def _build_calendar_component(name, events, data_type, link, show_today_on_date):
     template = '''
      <div class="component-container {cursor_element}" {on_click}>
@@ -196,7 +203,7 @@ def _build_calendar_component(name, events, data_type, link, show_today_on_date)
         </div>
     </div>
     '''
-    
+
     event_template = '''
     <div class="component-container-tableview-row">
         <div class="component-container-tableview-row-title">
@@ -217,7 +224,7 @@ def _build_calendar_component(name, events, data_type, link, show_today_on_date)
     cursor_element = 'cursor-element' if link else ''
     on_click = 'onclick="window.open(\'{}\',\'_self\')"'.format(link) if link else ''
     show_today_on_date_html = 'True' if show_today_on_date else 'False'
-  
+
     inner_html = ''
     for event in events:
         inner_html += event_template.format(title=event['name'], start_date=event['start'], end_date=event['end'], data_type=data_type, show_today_on_date=show_today_on_date_html)
@@ -246,13 +253,14 @@ def build_monitor_component():
         return None
 
     sorted_by_priority = sorted(keys, key=lambda k: config.MONITOR_MAPPING[k][config.MONITOR_MAPPING_PRIORITY_KEY])
-    
+
     inner_html = ''
     for key in sorted_by_priority:
         mapping = config.MONITOR_MAPPING[key]
         inner_html += row_template.format(id=mapping[config.MONITOR_MAPPING_ID_KEY], name=mapping[config.MONITOR_MAPPING_NAME_KEY])
 
     return template.format(inner_html=inner_html)
+
 
 def build_classes_component():
     events_today = []
@@ -262,9 +270,9 @@ def build_classes_component():
         event_start = datetime.fromtimestamp(event['start'])
         if event_start.date() == datetime.today().date():
             events_today.append(event)
-    
+
     return _build_calendar_component(name='CLASSES', events=events_today, data_type='countdown', link='iCal://', show_today_on_date=False)
-    
+
 
 def build_office_hours_component():
     events_today = []
@@ -275,14 +283,14 @@ def build_office_hours_component():
         if event_start.date() == datetime.today().date():
             event['name'] = event['name'].replace(': OH', '')
             events_today.append(event)
-    
+
     return _build_calendar_component(name='OFFICE HOURS', events=events_today, data_type='countdown', link='iCal://', show_today_on_date=False)
-    
+
 
 def build_l4a_component():
     events = calendar.fetch_events()['L4A']
     return _build_calendar_component(name='L4A', events=events, data_type='static', link='iCal://', show_today_on_date=False)
-    
+
 
 def build_weather_component_html():
     template = '''
