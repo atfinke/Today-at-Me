@@ -407,7 +407,7 @@ function getMonitorUpdate() {
       if (key in response) {
         let element = document.getElementById("monitor-bat")
         let value = response[key]
-        element.innerHTML = bat + '%';
+        element.innerHTML = value + '%';
         colorForAmount(element, 1- value);
       }
 

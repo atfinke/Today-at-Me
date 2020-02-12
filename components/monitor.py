@@ -30,9 +30,9 @@ def fetch_stats():
     }
 
     try:
-        battery = fetch_battery()
+        battery = _fetch_battery()
         if battery:
-            formatted_results[config.MONITOR_BATTERY_LEVEL_KEY] = battery
+            formatted_results[config.MONITOR_BATTERY_KEY] = battery
     except:
         pass
 
