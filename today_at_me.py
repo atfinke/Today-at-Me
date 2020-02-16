@@ -112,19 +112,27 @@ def _configure_for_connected_display():
     display_thread.start()
 
 
-def _prep_caches():
+def _prep_fast_fetch_caches():
     spotify.fetch_playlists(request_from_server=True)
-    google.fetch_homework(request_from_server=True)
-    calendar.fetch_events(request_from_server=True)
     lastfm.fetch_tracks(request_from_server=True)
     theme_parks.fetch_wait_times(request_from_server=True)
 
-    cache_thread = threading.Timer(config.CHECK_CACHE_INTERVAL, _prep_caches)
-    cache_thread.daemon = True
-    cache_thread.start()
+    fast_fetch_cache_thread = threading.Timer(config.CHECK_CACHE_INTERVAL, _prep_fast_fetch_caches)
+    fast_fetch_cache_thread.daemon = True
+    fast_fetch_cache_thread.start()
 
 
-_prep_caches()
+def _prep_slow_fetch_caches():
+    calendar.fetch_events(request_from_server=True)
+    google.fetch_homework(request_from_server=True)
+
+    slow_fetch_cache_thread = threading.Timer(config.CHECK_CACHE_INTERVAL / 2, _prep_slow_fetch_caches)
+    slow_fetch_cache_thread.daemon = True
+    slow_fetch_cache_thread.start()
+
+
+_prep_slow_fetch_caches()
+_prep_fast_fetch_caches()
 
 if __name__ == '__main__':
     if not monitor.is_mac_pro():

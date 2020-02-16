@@ -14,6 +14,7 @@ logger = logging.setup_logger(
     'calendar', config.CALENDAR_LOGGING_PATH)
 memory_cache = None
 
+
 def fetch_events(request_from_server=False):
     global memory_cache
     logger.info('fetch_events: called')
@@ -58,6 +59,7 @@ def fetch_events(request_from_server=False):
 
     memory_cache = cache.save(formatted_results, config.CALENDAR_CACHE_PATH)
     return formatted_results
+
 
 def invalidate_memory_cache():
     logger.info('invalidate_memory_cache: called')
