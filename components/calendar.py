@@ -38,7 +38,7 @@ def fetch_events(request_from_server=False):
     cst = tz.gettz('America/Chicago')
     today = datetime.now().date()
     start_dt = datetime(today.year, today.month, today.day, tzinfo=cst)
-    end_dt = start_dt + timedelta(30)
+    end_dt = start_dt + timedelta(180)
 
     start_int = int(start_dt.strftime("%s"))
     end_int = int(end_dt.strftime("%s"))
