@@ -408,7 +408,7 @@ function getMonitorUpdate() {
         let element = document.getElementById("monitor-bat")
         let value = response[key]
         element.innerHTML = value + '%';
-        colorForAmount(element, 1- value);
+        colorForAmount(element, 100 - value);
       }
 
       key = 'CPU die temperature: '
