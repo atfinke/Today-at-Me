@@ -8,6 +8,7 @@ logger = logging.setup_logger(
 
 __was_connected_to_external_display = None
 
+
 def _is_connected_to_external_display():
     logger.info('_is_connected_to_external_display: called')
     result = subprocess.run(
@@ -35,29 +36,29 @@ def configure_for_connected_display():
         {}
         {}
         tell application "System Preferences" to quit
-        '''.format(__open_system_preferences_script(), __system_events_script(is_connected_to_external_display=True))
+        '''.format(__system_events_general_script(is_connected_to_external_display=True), __system_events_display_sound_output_script())
         applescript.run_sync(script)
     else:
         script = '''
         {}
-        {}
         tell application "System Preferences" to quit
         delay 0.2
+        set volume output volume 0
         tell application "time.app" to activate
-        '''.format(__open_system_preferences_script(), __system_events_script(is_connected_to_external_display=False))
+        '''.format(__system_events_general_script(is_connected_to_external_display=False))
         applescript.run_sync(script)
     logger.info('configure_for_connected_display: updated system')
 
 
 # Script Builders
 
-def __open_system_preferences_script():
+def __open_pane(id, name):
     return '''
     tell application "System Preferences"
         activate
-        set the current pane to pane id "com.apple.preference.general"
+        set the current pane to pane id "{}"
         try
-            repeat until window "General" exists
+            repeat until window "{}" exists
                 delay 0.1
             end repeat
             delay 0.25
@@ -65,13 +66,14 @@ def __open_system_preferences_script():
             get error_message
         end try
     end tell
-    '''
+    '''.format(id, name)
 
 
-def __system_events_script(is_connected_to_external_display):
+def __system_events_general_script(is_connected_to_external_display):
     hide_menu_bar = 'true' if is_connected_to_external_display else 'false'
     hide_dock = 'false' if is_connected_to_external_display else 'true'
     return '''
+    {}
     tell application "System Events"
         set theCheckbox to checkbox "Automatically hide and show the menu bar" of window "General" of application process "System Preferences" of application "System Events"
         tell theCheckbox
@@ -80,5 +82,17 @@ def __system_events_script(is_connected_to_external_display):
         end tell
         set the autohide of the dock preferences to {}
     end tell
-    '''.format(hide_menu_bar, hide_dock)
-    
+    '''.format(__open_pane('com.apple.preference.general', 'General'), hide_menu_bar, hide_dock)
+
+
+def __system_events_display_sound_output_script():
+    return '''
+    {}
+    tell application "System Events" to tell application process "System Preferences"
+        set theRows to rows of table 1 of scroll area 1 of tab group 1 of window "Sound"
+        set theLastRowIndex to (count of items in theRows)
+        
+        set theLastRow to item theLastRowIndex of theRows
+        set selected of theLastRow to true
+    end tell
+    '''.format(__open_pane('com.apple.preference.sound', 'Sound'))
