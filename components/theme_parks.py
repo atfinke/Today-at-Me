@@ -1,4 +1,5 @@
-import urllib.request, json 
+import urllib.request
+import json
 from datetime import datetime
 
 from components import cache, logging
@@ -7,6 +8,7 @@ from configuration import config
 logger = logging.setup_logger(
     'theme-park', config.THEME_PARKS_LOGGING_PATH)
 memory_cache = None
+
 
 def fetch_wait_times(request_from_server=False):
     global memory_cache
@@ -23,17 +25,21 @@ def fetch_wait_times(request_from_server=False):
         return content
 
     rides = []
-    with urllib.request.urlopen(config.THEME_PARKS_DLR_URL) as url:
-        for park_rides in list(json.loads(url.read().decode()).values()):
-            rides.extend(park_rides)
-    with urllib.request.urlopen(config.THEME_PARKS_WDW_URL) as url:
-        for park_rides in list(json.loads(url.read().decode()).values()):
-            rides.extend(park_rides)
+    try:
+        with urllib.request.urlopen(config.THEME_PARKS_DLR_URL) as url:
+            for park_rides in list(json.loads(url.read().decode()).values()):
+                rides.extend(park_rides)
+        with urllib.request.urlopen(config.THEME_PARKS_WDW_URL) as url:
+            for park_rides in list(json.loads(url.read().decode()).values()):
+                rides.extend(park_rides)
+    except:
+        pass
 
     logger.info('fetch_wait_times: got {} rides'.format(len(rides)))
 
     memory_cache = cache.save(rides, config.THEME_PARKS_CACHE_PATH)
     return rides
+
 
 def invalidate_memory_cache():
     logger.info('invalidate_memory_cache: called')

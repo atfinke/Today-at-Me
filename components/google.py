@@ -23,6 +23,7 @@ logger = logging.setup_logger(
 creds = None
 memory_cache = None
 
+
 def auth():
     global creds
     logger.info('auth: called')
@@ -33,18 +34,21 @@ def auth():
     if os.path.exists(config.GOOGLE_AUTH_PATH):
         with open(config.GOOGLE_AUTH_PATH, 'rb') as token:
             creds = pickle.load(token)
-            
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            logger.info('auth: refreshing')
-            creds.refresh(Request())
-        else:
-            logger.info('auth: starting flow')
-            flow = InstalledAppFlow.from_client_secrets_file(
-                config.GOOGLE_CREDIENTALS_PATH, SCOPES)
-            creds = flow.run_console()
-        with open(config.GOOGLE_AUTH_PATH, 'wb') as token:
-            pickle.dump(creds, token)
+
+    try:
+        if not creds or not creds.valid:
+            if creds and creds.expired and creds.refresh_token:
+                logger.info('auth: refreshing')
+                creds.refresh(Request())
+            else:
+                logger.info('auth: starting flow')
+                flow = InstalledAppFlow.from_client_secrets_file(
+                    config.GOOGLE_CREDIENTALS_PATH, SCOPES)
+                creds = flow.run_console()
+            with open(config.GOOGLE_AUTH_PATH, 'wb') as token:
+                pickle.dump(creds, token)
+    except:
+        pass
 
 
 def fetch_homework(request_from_server=False):
@@ -66,7 +70,7 @@ def fetch_homework(request_from_server=False):
     try:
         service = build('drive', 'v3', credentials=creds)
         request = service.files().export_media(fileId=config.GOOGLE_HOMEWORK_DOC_ID, mimeType='text/html')
-        
+
         fh = io.BytesIO()
         downloader = MediaIoBaseDownload(fh, request)
         done = False
@@ -96,13 +100,14 @@ def fetch_homework(request_from_server=False):
                     date_dt = datetime(2020, int(date_split[0]), int(date_split[1]))
                     name = detail_split[1]
                     formatted_assignments.append({'name': class_name + ': ' + name, 'start': date_dt.timestamp(), 'end': date_dt.timestamp()})
-        
+
         logger.info('fetch_homework: fetched {} classes'.format(len(formatted_assignments)))
 
         memory_cache = cache.save(formatted_assignments, config.GOOGLE_CACHE_PATH)
         return formatted_assignments
     except:
-        return None
+        return []
+
 
 def invalidate_memory_cache():
     global memory_cache

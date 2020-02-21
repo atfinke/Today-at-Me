@@ -15,6 +15,7 @@ last_downloaded_image_url = None
 memory_playlists_cache = None
 destinations_with_image = []
 
+
 def auth():
     logger.info('auth: called')
 
@@ -25,6 +26,7 @@ def auth():
     sp = spotipy.Spotify(auth=token)
     logger.info('auth: done')
 
+
 def now_playing_info():
     auth()
     global sp
@@ -34,7 +36,7 @@ def now_playing_info():
             return None, None, None, None
     except:
         return None, None, None, None
-        
+
     item = track['item']
     all_images = sorted(item['album']['images'], key=lambda k: k['height'])
     for image in all_images:
@@ -78,7 +80,7 @@ def prepare_to_send_image(destination):
 
 def fetch_playlists(request_from_server=False):
     auth()
-    
+
     global memory_playlists_cache, sp
     logger.info('fetch_playlists: called')
 
@@ -92,18 +94,21 @@ def fetch_playlists(request_from_server=False):
     if content:
         return content
 
-    formatted_playlists = []
-    playlists = sp.user_playlists(config.SPOTIFY_USERNAME)
-    for playlist in playlists['items']:
-        if playlist['owner']['id'] == config.SPOTIFY_USERNAME:
-            formatted_playlists.append(
-                {'name': playlist['name'], 'uri': playlist['uri']})
+    try:
+        formatted_playlists = []
+        playlists = sp.user_playlists(config.SPOTIFY_USERNAME)
+        for playlist in playlists['items']:
+            if playlist['owner']['id'] == config.SPOTIFY_USERNAME:
+                formatted_playlists.append(
+                    {'name': playlist['name'], 'uri': playlist['uri']})
 
-    logger.info('fetch_playlists: got {} playlists'.format(
-        len(formatted_playlists)))
+        logger.info('fetch_playlists: got {} playlists'.format(
+            len(formatted_playlists)))
 
-    memory_playlists_cache = cache.save(formatted_playlists, config.SPOTIFY_PLAYLISTS_CACHE_PATH)
-    return formatted_playlists
+        memory_playlists_cache = cache.save(formatted_playlists, config.SPOTIFY_PLAYLISTS_CACHE_PATH)
+        return formatted_playlists
+    except:
+        return []
 
 
 def remove_now_playing_from_current_playlist(now_playing_track_uri, now_playing_playlist_uri):
@@ -143,6 +148,7 @@ def add_now_playing_to_playlist(now_playing_uri, playlist_uri):
     else:
         return 'Error', 500
 
+
 def play_track(track, artist):
     global sp
     logger.info('play_track: called')
@@ -155,6 +161,7 @@ def play_track(track, artist):
     else:
         logger.info('no tracks result')
         return 'Error', 500
+
 
 def invalidate_memory_cache():
     logger.info('invalidate_memory_cache: called')
