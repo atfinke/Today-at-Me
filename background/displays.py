@@ -90,9 +90,11 @@ def __system_events_display_sound_output_script():
     {}
     tell application "System Events" to tell application process "System Preferences"
         set theRows to rows of table 1 of scroll area 1 of tab group 1 of window "Sound"
-        set theLastRowIndex to (count of items in theRows)
+        if (count of items in theRows) > 1 then
+            set theRow to item 2 of theRows
+            set selected of theRow to true
+        end if
         
-        set theLastRow to item theLastRowIndex of theRows
-        set selected of theLastRow to true
+        
     end tell
     '''.format(__open_pane('com.apple.preference.sound', 'Sound'))
