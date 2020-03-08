@@ -201,7 +201,8 @@ function updateWeather() {
                 element.getElementsByClassName("container-single-row-title")[0].innerHTML = place;
 
                 element.getElementsByClassName("container-single-row-detail")[0].innerHTML = "" + temp.toFixed(1) + "°";
-
+                element.getElementsByClassName("container-single-row-detail")[0].style.color =
+                    "hsl(56, " + temp.toFixed(1).toString() + "%, 65%)";
                 element.style.opacity = 1;
             })
             .catch(error => {
