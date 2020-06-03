@@ -60,14 +60,13 @@ def build_spotify_add_to_playlist_html():
 
 
 def build_theatre_component():
-    events = calendar.fetch_events()['A.Theatre']
+    events = []
     return _build_calendar_component(name='A.THEATRE', events=events, data_type='static', link='https://www.andrewfinke.com/theatre', show_today_on_date=False)
 
 
 def build_life_nu_component():
     events = calendar.fetch_events()
-    all_events = events['Life'] + events['NU'] + \
-        events['andrewfinke2021@u.northwestern.edu']
+    all_events = events['Life'] + events['NU']
     all_events = sorted(all_events, key=lambda i: i['start'])
 
     now = datetime.today()
