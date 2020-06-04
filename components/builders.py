@@ -58,15 +58,9 @@ def build_spotify_add_to_playlist_html():
         options_html += option_template.format(uri=playlist['uri'], name=playlist['name'])
     return template.format(options=options_html)
 
-
-def build_theatre_component():
-    events = []
-    return _build_calendar_component(name='A.THEATRE', events=events, data_type='static', link='https://www.andrewfinke.com/theatre', show_today_on_date=False)
-
-
-def build_life_nu_component():
+def build_life_component():
     events = calendar.fetch_events()
-    all_events = events['Life'] + events['NU']
+    all_events = events['Life']
     all_events = sorted(all_events, key=lambda i: i['start'])
 
     now = datetime.today()
@@ -76,25 +70,7 @@ def build_life_nu_component():
         if (event_start - now).days < config.CALENDAR_LIFE_EVENT_DAY_RANGE:
             events.append(event)
 
-    return _build_calendar_component(name='LIFE + NU', events=events, data_type='static', link='iCal://', show_today_on_date=False)
-
-
-def build_homework_component():
-    events = google.fetch_homework()
-    events = sorted(events, key=lambda i: i['start'])
-
-    if not events or len(events) == 0:
-        return None
-
-    now = datetime.today()
-    events_week = []
-    for event in events:
-        event_start = datetime.fromtimestamp(event['start'])
-        if (event_start - now).days <= 7:
-            events_week.append(event)
-
-    return _build_calendar_component(name='UPCOMING ASSIGNMENTS', events=events_week, data_type='static', link='https://docs.google.com/document/d/1RtAUOrqs8wJgkiYOi4mYyfAiA823Mhcc8X4JWMlf5wk/edit', show_today_on_date=True)
-
+    return _build_calendar_component(name='LIFE', events=events, data_type='static', link='iCal://', show_today_on_date=False)
 
 def build_lastfm_component():
     template = '''
@@ -260,32 +236,6 @@ def build_monitor_component():
 
     return template.format(inner_html=inner_html)
 
-
-def build_classes_component():
-    events_today = []
-    events = calendar.fetch_events()['NU Classes']
-
-    for event in events:
-        event_start = datetime.fromtimestamp(event['start'])
-        if event_start.date() == datetime.today().date():
-            events_today.append(event)
-
-    return _build_calendar_component(name='CLASSES', events=events_today, data_type='countdown', link='iCal://', show_today_on_date=False)
-
-
-def build_office_hours_component():
-    events_today = []
-    events = calendar.fetch_events()['NU OH']
-
-    for event in events:
-        event_start = datetime.fromtimestamp(event['start'])
-        if event_start.date() == datetime.today().date():
-            event['name'] = event['name'].replace(': OH', '')
-            events_today.append(event)
-
-    return _build_calendar_component(name='OFFICE HOURS', events=events_today, data_type='countdown', link='iCal://', show_today_on_date=False)
-
-
 def build_l4a_component():
     events = calendar.fetch_events()['L4A']
     return _build_calendar_component(name='L4A', events=events, data_type='static', link='iCal://', show_today_on_date=False)
@@ -301,4 +251,4 @@ def build_weather_component_html():
     </div>
     '''
 
-    return template.format(latitude=42.045071, longitude=-87.687698, API_KEY=config.WEATHER_API_KEY)
+    return template.format(latitude=42.132401, longitude=-87.758263, API_KEY=config.WEATHER_API_KEY)

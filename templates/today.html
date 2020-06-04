@@ -32,53 +32,33 @@
         <div class="component-column">
 
 
-
-
-            
-            {% if classes_component_html %}
-            {{ classes_component_html|safe }}
+            {% if stocks_component_html %}
+            {{ stocks_component_html|safe }}
             {% else %}
             {% endif %}
 
-            {% if office_hours_component_html %}
-            {{ office_hours_component_html|safe }}
-            {% else %}
-            {% endif %}
-
-            {% if life_nu_component_html %}
-            {{ life_nu_component_html|safe }}
+            {% if life_component_html %}
+            {{ life_component_html|safe }}
             {% else %}
             {% endif %}
             
-            {% if l4a_component_html %}
-            {{ l4a_component_html|safe }}
-            {% else %}
-            {% endif %}
+            
 
             
         </div>
 
         <div class="component-column">
             
+      
             
-            
-            {% if homework_component_html %}
-            {{ homework_component_html|safe }}
-            {% else %}
-            {% endif %}
-            
-            {% if theatre_component_html %}
-            {{ theatre_component_html|safe }}
-            {% else %}
-            {% endif %}
-
-            {% if stocks_component_html %}
-            {{ stocks_component_html|safe }}
-            {% else %}
-            {% endif %}
 
             {% if lastfm_component_html %}
             {{ lastfm_component_html|safe }}
+            {% else %}
+            {% endif %}
+
+            {% if l4a_component_html %}
+            {{ l4a_component_html|safe }}
             {% else %}
             {% endif %}
         </div>

@@ -19,7 +19,7 @@ CALENDAR_LOGGING_PATH = LOGGING_DATA_PATH + '/calendar.log'
 CALENDAR_EVENT_NAME_KEY = 'name'
 CALENDAR_EVENT_START_DATE_KEY = 'start'
 CALENDAR_EVENT_END_DATE_KEY = 'end'
-CALENDAR_CALENDARS = ['Life', 'NU', 'NU Classes', 'L4A', 'NU OH', 'A.Theatre', 'andrewfinke2021@u.northwestern.edu']
+CALENDAR_CALENDARS = ['Life', 'L4A']
 
 GOOGLE_CACHE_PATH = CACHE_DATA_PATH + '/homework.json'
 GOOGLE_CACHE_LIFETIME = 60 * 10
