@@ -21,31 +21,19 @@ from configuration import config
 WSGIRequestHandler.protocol_version = "HTTP/1.1"
 app = Flask(__name__)
 
-import time
-
 @app.route('/')
 def today():
     start_time = time.time()
     header_now_playing_column_inner_html = builders.build_header_now_playing_column_inner_html()
-    print(time.time() - start_time)
-    print('---------')
     spotify_add_to_playlist_html = builders.build_spotify_add_to_playlist_html()
-    print(time.time() - start_time)
     life_component_html = builders.build_life_component()
-    print(time.time() - start_time)
     l4a_component_html = builders.build_l4a_component()
-    print(time.time() - start_time)
     lastfm_component_html = builders.build_lastfm_component()
-    print(time.time() - start_time)
     theme_park_component_html = builders.build_theme_park_component()
-    print(time.time() - start_time)
     stocks_component_html = builders.build_stocks_component()
-    print(time.time() - start_time)
     monitor_component_html = builders.build_monitor_component()
-    print(time.time() - start_time)
     weather_component_html = builders.build_weather_component_html()
     
-    print(time.time() - start_time)
     return render_template('today.html',
                            header_now_playing_column_inner_html=header_now_playing_column_inner_html,
                            spotify_add_to_playlist_html=spotify_add_to_playlist_html,
