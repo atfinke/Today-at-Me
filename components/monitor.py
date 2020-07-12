@@ -13,12 +13,15 @@ memory_cache = None
 battery_cache = None
 powermetrics_cache = None
 
-def fetch_stats():
+def fetch_stats(force_cache=False):
     global memory_cache
     logger.info('fetch_stats: called')
 
     if memory_cache:
         logger.info('fetch_stats: checking memory cache')
+        if force_cache:
+            logger.info('fetch_stats: force cache')
+            return memory_cache[config.CACHE_CONTENT_KEY]
 
     content = cache.content(memory_cache, config.MONITOR_CACHE_LIFETIME, False)
     if content:

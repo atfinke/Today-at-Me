@@ -28,7 +28,7 @@ def build_header_now_playing_column_inner_html():
     </div>
     '''
 
-    tn, turi, pn, puri = spotify.now_playing_info()
+    tn, turi, pn, puri = None, None, None, None #spotify.now_playing_info()
     if tn == None:
         tn = '-'
     if pn == None:
@@ -75,7 +75,7 @@ def build_life_component():
 def build_lastfm_component():
     template = '''
      <div class="component-container">
-        <div class="component-container-title cursor-element" onclick="window.open(\'https://www.last.fm/user/andrewfinke/listening-report/week\',\'_self\')">{name}</div>
+        <div class="component-container-title cursor-element" onclick="window.open(\'https://www.last.fm/user/{username}/listening-report/week\',\'_self\')">{name}</div>
         <div class="component-container-tableview">
             {inner_html}
         </div>
@@ -102,7 +102,7 @@ def build_lastfm_component():
     for track in tracks:
         id = random.randint(1, 100_000_000)
         inner_html += track_template.format(id=id, name=track['name'], count=track['count'], data_name=track['name'], data_artist=track['artist'])
-    return template.format(name='TOP TRACKS LAST WEEK', inner_html=inner_html)
+    return template.format(username=config.LASTFM_USERNAME, name='TOP TRACKS LAST WEEK', inner_html=inner_html)
 
 
 def build_stocks_component():
@@ -124,7 +124,7 @@ def build_stocks_component():
 
     '''
 
-    fetched_stocks = stocks.fetch_stocks()
+    fetched_stocks = stocks.fetch_stocks(force_cache=True)
     if not fetched_stocks or len(fetched_stocks) == 0:
         return None
 
@@ -223,7 +223,7 @@ def build_monitor_component():
 
     '''
 
-    keys = list(monitor.fetch_stats().keys())
+    keys = list(monitor.fetch_stats(force_cache=True).keys())
     if not keys or len(keys) == 0:
         return None
 

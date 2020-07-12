@@ -14,7 +14,7 @@ sp = None
 last_downloaded_image_url = None
 memory_playlists_cache = None
 destinations_with_image = []
-
+playlist_uri_to_name = {}
 
 def auth():
     logger.info('auth: called')
@@ -29,7 +29,7 @@ def auth():
 
 def now_playing_info():
     auth()
-    global sp
+    global sp, playlist_uri_to_name
     try:
         track = sp.currently_playing()
         if not track:
@@ -49,9 +49,13 @@ def now_playing_info():
 
     if 'context' in track and track['context'] and 'uri' in track['context'] and 'type' in track['context'] and track['context']['type'] == 'playlist':
         playlist_uri = track['context']['uri']
-        result = sp.playlist(playlist_uri)
-        if 'name' in result:
-            playlist_name = result['name']
+        if playlist_uri in playlist_uri_to_name:
+            playlist_name = playlist_uri_to_name[playlist_uri]
+        else:
+            result = sp.playlist(playlist_uri)
+            if 'name' in result:
+                playlist_name = result['name']
+                playlist_uri_to_name[playlist_uri] = playlist_name
     return item['name'], item['uri'], playlist_name, playlist_uri
 
 
@@ -134,7 +138,7 @@ def add_now_playing_to_playlist(now_playing_uri, playlist_uri):
     logger.info('add_now_playing_to_playlist: called')
 
     global sp
-    _, turi, _, puri = now_playing_info()
+    _, turi, _, _ = now_playing_info()
 
     if now_playing_uri != turi:
         logger.error('add_now_playing_to_playlist: not playing same track {} {}'.format(

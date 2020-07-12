@@ -21,19 +21,41 @@ from configuration import config
 WSGIRequestHandler.protocol_version = "HTTP/1.1"
 app = Flask(__name__)
 
+import time
 
 @app.route('/')
 def today():
+    start_time = time.time()
+    header_now_playing_column_inner_html = builders.build_header_now_playing_column_inner_html()
+    print(time.time() - start_time)
+    print('---------')
+    spotify_add_to_playlist_html = builders.build_spotify_add_to_playlist_html()
+    print(time.time() - start_time)
+    life_component_html = builders.build_life_component()
+    print(time.time() - start_time)
+    l4a_component_html = builders.build_l4a_component()
+    print(time.time() - start_time)
+    lastfm_component_html = builders.build_lastfm_component()
+    print(time.time() - start_time)
+    theme_park_component_html = builders.build_theme_park_component()
+    print(time.time() - start_time)
+    stocks_component_html = builders.build_stocks_component()
+    print(time.time() - start_time)
+    monitor_component_html = builders.build_monitor_component()
+    print(time.time() - start_time)
+    weather_component_html = builders.build_weather_component_html()
+    
+    print(time.time() - start_time)
     return render_template('today.html',
-                           header_now_playing_column_inner_html=builders.build_header_now_playing_column_inner_html(),
-                           spotify_add_to_playlist_html=builders.build_spotify_add_to_playlist_html(),
-                           life_component_html=builders.build_life_component(),
-                           l4a_component_html=builders.build_l4a_component(),
-                           lastfm_component_html=builders.build_lastfm_component(),
-                           theme_park_component_html=builders.build_theme_park_component(),
-                           stocks_component_html=builders.build_stocks_component(),
-                           monitor_component_html=builders.build_monitor_component(),
-                           weather_component_html=builders.build_weather_component_html())
+                           header_now_playing_column_inner_html=header_now_playing_column_inner_html,
+                           spotify_add_to_playlist_html=spotify_add_to_playlist_html,
+                           life_component_html=life_component_html,
+                           l4a_component_html=l4a_component_html,
+                           lastfm_component_html=lastfm_component_html,
+                           theme_park_component_html=theme_park_component_html,
+                           stocks_component_html=stocks_component_html,
+                           monitor_component_html=monitor_component_html,
+                           weather_component_html=weather_component_html)
 
 
 @app.route("/clear_cache", methods=["POST"])
@@ -104,6 +126,7 @@ def _configure_for_connected_display():
 
     display_thread = threading.Timer(
         config.CHECK_DISPLAY_INTERVAL, _configure_for_connected_display)
+    display_thread.name = "display check"
     display_thread.daemon = True
     display_thread.start()
 
@@ -114,6 +137,7 @@ def _prep_fast_fetch_caches():
     theme_parks.fetch_wait_times(request_from_server=True)
 
     fast_fetch_cache_thread = threading.Timer(config.CHECK_CACHE_INTERVAL, _prep_fast_fetch_caches)
+    fast_fetch_cache_thread.name = "fast cache"
     fast_fetch_cache_thread.daemon = True
     fast_fetch_cache_thread.start()
 
@@ -123,10 +147,16 @@ def _prep_slow_fetch_caches():
     google.fetch_homework(request_from_server=True)
 
     slow_fetch_cache_thread = threading.Timer(config.CHECK_CACHE_INTERVAL / 2, _prep_slow_fetch_caches)
+    slow_fetch_cache_thread.name = "slow cache"
     slow_fetch_cache_thread.daemon = True
     slow_fetch_cache_thread.start()
 
+def _prep_one_off_inits():
+    _ = monitor.fetch_stats()
+    _ = stocks.fetch_stocks()
+    _ = spotify.now_playing_info()
 
+_prep_one_off_inits()
 _prep_slow_fetch_caches()
 _prep_fast_fetch_caches()
 

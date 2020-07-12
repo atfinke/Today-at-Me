@@ -9,17 +9,21 @@ logger = logging.setup_logger(
 
 memory_cache = None
 
-def fetch_stocks():
+def fetch_stocks(force_cache=False):
     global memory_cache
 
     if memory_cache:
         logger.info('fetch_stocks: checking memory cache')
+        if force_cache:
+            logger.info('fetch_stocks: force cache')
+            return memory_cache[config.CACHE_CONTENT_KEY]
 
     content = cache.content(memory_cache, config.STOCKS_CACHE_LIFETIME, False)
     if content:
         return content
 
     try:
+        logger.info('fetch_stocks: using remote')
         stocks = []
         symbols = config.STOCKS_SYMBOLS
         for symbol in symbols:
