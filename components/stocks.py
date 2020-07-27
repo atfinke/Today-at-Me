@@ -1,4 +1,4 @@
-import urllib.request, json 
+import requests
 from datetime import datetime
 
 from components import cache, logging
@@ -42,26 +42,33 @@ def fetch_stocks(force_cache=False):
 
 def _nasdaq_stock_percent_change(symbol):
     endpoint = 'https://api.nasdaq.com/api/quote/' + symbol + '/info?assetclass=stocks'
-    with urllib.request.urlopen(endpoint) as url:
-        data = json.loads(url.read().decode())['data']
-        
-        if 'secondaryData' in data and data['secondaryData']:
-            data = data['secondaryData']
-        else:
-            data = data['primaryData']
-        sign = '-' if data['deltaIndicator'] == 'down' else '+'
-        return sign + data['percentageChange'].strip().replace(' ', '')
-    return None
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.2 Safari/605.1.15',
+        'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+    }
+    response = requests.get(endpoint, headers=headers, timeout=5).json()
+    data = response['data']
+
+    if 'secondaryData' in data and data['secondaryData']:
+        data = data['secondaryData']
+    else:
+        data = data['primaryData']
+    return data['percentageChange'].strip().replace(' ', '')
     
 def _exchanges():
     exchanges = []
     endpoint = 'https://api.nasdaq.com/api/quote/indices?symbol=IXIC&symbol=SPX'
-    with urllib.request.urlopen(endpoint) as url:
-        data = json.loads(url.read().decode())['data']
-        for exchange in data:
-            name = exchange['companyName'].replace('Composite', '')
-            percent = exchange['percentageChange'].strip().replace(' ', '')
-            percent = percent if percent[0] == '-' else ('+' + percent)
-            exchanges.append({'name': name, 'percent': percent})
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.2 Safari/605.1.15',
+        'accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+    }
+    response = requests.get(endpoint, headers=headers, timeout=5).json()
+    data = response['data']
+    
+    for exchange in data:
+        name = exchange['companyName'].replace('Composite', '')
+        percent = exchange['percentageChange'].strip().replace(' ', '')
+        percent = percent if percent[0] == '-' else ('+' + percent)
+        exchanges.append({'name': name, 'percent': percent})
     exchanges = sorted(exchanges, key = lambda i: i['name'])
     return exchanges

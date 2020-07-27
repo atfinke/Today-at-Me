@@ -23,7 +23,6 @@ app = Flask(__name__)
 
 @app.route('/')
 def today():
-    start_time = time.time()
     header_now_playing_column_inner_html = builders.build_header_now_playing_column_inner_html()
     spotify_add_to_playlist_html = builders.build_spotify_add_to_playlist_html()
     life_component_html = builders.build_life_component()
