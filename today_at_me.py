@@ -100,6 +100,11 @@ def spotify_remove_track():
     now_playing_playlist_uri = request.args.get('now_playing_playlist_uri')
     return spotify.remove_now_playing_from_current_playlist(now_playing_track_uri, now_playing_playlist_uri)
 
+@app.route("/spotify/remove_now_playing_track", methods=["POST"])
+def spotify_remove_now_playing_track():
+    _, turi, _, puri = spotify.now_playing_info()
+    return spotify.remove_now_playing_from_current_playlist(turi, puri)
+
 
 @app.route("/spotify/play_track", methods=["POST"])
 def spotify_play_track():
