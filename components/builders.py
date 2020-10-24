@@ -250,5 +250,4 @@ def build_weather_component_html():
         </div>        
     </div>
     '''
-
-    return template.format(latitude=42.132401, longitude=-87.758263, API_KEY=config.WEATHER_API_KEY)
+    return template.format(latitude=config.WEATHER_LATITUDE, longitude=config.WEATHER_LONGITUDE, API_KEY=config.WEATHER_API_KEY)
