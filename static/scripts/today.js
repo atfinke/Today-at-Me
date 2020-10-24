@@ -500,10 +500,10 @@ function start() {
     spotifyGetNowPlaying();
     setInterval(spotifyGetNowPlaying, 5000);
 
-    let countdownID = "XYZ";
-    let endDate = new Date("Nov 2, 2020 10:00").getTime();
-    updateCountdownComponent(countdownID, endDate);
-    setInterval(updateCountdownComponent.bind(null, countdownID, endDate), 1000);
+    // let countdownID = "XYZ";
+    // let endDate = new Date("Nov 2, 2020 10:00").getTime();
+    // updateCountdownComponent(countdownID, endDate);
+    // setInterval(updateCountdownComponent.bind(null, countdownID, endDate), 1000);
 
     configureNameAnimations();
     updateTodayDate();
